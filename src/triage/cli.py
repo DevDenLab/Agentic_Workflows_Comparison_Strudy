@@ -6,6 +6,8 @@ from typing import Annotated
 import typer
 
 from triage import __version__
+from triage.bench.golden import load_golden_set
+from triage.bench.review import write_review_sheet
 from triage.config import ConfigError
 from triage.container import Container, build_container, build_v1, init_cmdb
 from triage.contracts import InboundMessage, TriageResult
@@ -90,6 +92,22 @@ def worker(full: FullOption = False) -> None:
     while (delivery := v1.queue.lease()) is not None:
         _print(v1.pipeline.triage(delivery.message), full)
         v1.queue.ack(delivery)
+
+
+@app.command("review-sheet")
+def review_sheet(
+    output: Annotated[Path, typer.Option(help="Where to write the CSV.")] = Path(
+        "reports/label-review.csv"
+    ),
+) -> None:
+    """Export the golden set as a CSV for label review. Opens in Excel."""
+    container = _container()
+    try:
+        golden = load_golden_set(container.settings.data_dir / "golden")
+    except ConfigError as exc:
+        typer.echo(f"golden set invalid: {exc}", err=True)
+        raise typer.Exit(code=1) from exc
+    typer.echo(f"wrote {write_review_sheet(golden, output)} cases to {output}")
 
 
 @app.command()

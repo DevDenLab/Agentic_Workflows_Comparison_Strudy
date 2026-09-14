@@ -19,7 +19,7 @@ The goal is not to show that agents are better. It is to measure where the extra
 |---|---|---|
 | 0 | Scaffold: contracts, taxonomy, config, logging, CI, module boundaries | done |
 | 1 | v1 conventional pipeline + tests | done |
-| 2 | Golden ticket set + benchmark harness (v1) | next |
+| 2 | Golden ticket set + benchmark harness (v1) | in progress: 150 labelled tickets drafted, labels in human review |
 | 3 | LLM client (record/replay) + v1.5 | |
 | 4 | v2 agentic workflow | |
 | 5 | Full benchmark report, ADRs, final diagrams | |

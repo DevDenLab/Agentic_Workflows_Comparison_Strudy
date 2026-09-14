@@ -4,6 +4,7 @@ This package imports nothing else from `triage` (enforced by import-linter), so 
 benchmark can all depend on it without depending on each other.
 """
 
+from triage.contracts._base import NonEmptyStr, TaxonomyId
 from triage.contracts.decision import (
     AuditEvent,
     Citation,
@@ -27,10 +28,12 @@ __all__ = [
     "Enrichment",
     "ExtractedFields",
     "InboundMessage",
+    "NonEmptyStr",
     "Outcome",
     "Priority",
     "Taxonomy",
     "TaxonomyEntry",
+    "TaxonomyId",
     "Ticket",
     "TriageDecision",
     "TriagePipeline",

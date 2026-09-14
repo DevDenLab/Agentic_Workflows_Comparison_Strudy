@@ -8,7 +8,7 @@ export UV_PROJECT_ENVIRONMENT ?= $(subst \,/,$(LOCALAPPDATA))/service-desk-triag
 endif
 
 .PHONY: help install lint format typecheck imports test-unit test-integration test check \
-	config-check demo serve docker-build docker-run clean
+	config-check review-sheet demo serve docker-build docker-run clean
 
 help: ## List targets
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-14s %s\n", $$1, $$2}'
@@ -43,6 +43,9 @@ check: lint typecheck imports test ## Everything CI runs
 
 config-check: ## Validate every config file
 	uv run triage config-check
+
+review-sheet: ## Export the golden set to reports/label-review.csv for label review
+	uv run triage review-sheet
 
 demo: ## Triage the sample emails with v1
 	uv run triage run data/samples

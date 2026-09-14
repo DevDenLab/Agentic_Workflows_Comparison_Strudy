@@ -1,0 +1,578 @@
+# Golden set — in-distribution split.
+# Tickets written in the IT vocabulary the v1 rules were built around.
+# Labels follow docs/labelling-guide.md (service-desk policy), never rules.yaml.
+split: in_dist
+cases:
+  # ---------------------------------------------------------------- access_identity
+  - id: IND-001
+    subtype: standard
+    input:
+      channel: email
+      sender: kevin.nguyen@contoso.example
+      subject: Locked out
+      body: |
+        Hi,
+
+        I'm locked out of my account after too many sign-in attempts this morning.
+
+        Thanks,
+        Kevin
+    label: {category: access_identity, impact: low, urgency: medium, priority: P4, assignment_group: service_desk_l1, handling: auto}
+    rationale: "C1 lockout. I3 non-clinical. U1 medium. R1."
+
+  - id: IND-002
+    subtype: standard
+    input:
+      channel: email
+      sender: olivia.grant@contoso.example
+      subject: Password expired
+      body: |
+        My password expired over the weekend and the self-service portal won't let me change it.
+        Can you reset my password?
+    label: {category: access_identity, impact: low, urgency: medium, priority: P4, assignment_group: service_desk_l1, handling: auto}
+    rationale: "C1 password. I3 non-clinical. U1 medium. R1."
+
+  - id: IND-003
+    subtype: standard
+    input:
+      channel: email
+      sender: grace.okafor@contoso.example
+      subject: Account locked
+      body: |
+        My account is locked since this morning. I think I forgot my password after the holidays.
+
+        Thanks,
+        Grace
+    label: {category: access_identity, impact: medium, urgency: medium, priority: P3, assignment_group: service_desk_l1, handling: auto}
+    rationale: "C1 lockout. I2 clinical department (MED4B). U1 medium. R1."
+
+  - id: IND-004
+    subtype: standard
+    input:
+      channel: email
+      sender: samir.patel@contoso.example
+      subject: Password reset
+      body: |
+        Need a password reset please, Windows says account locked after the update.
+    label: {category: access_identity, impact: low, urgency: medium, priority: P4, assignment_group: service_desk_l1, handling: auto}
+    rationale: "C1 lockout. I3 non-clinical. U1 medium. R1."
+
+  - id: IND-005
+    subtype: standard
+    input:
+      channel: web_form
+      sender: rebecca.stone@contoso.example
+      subject: MFA
+      body: |
+        The authenticator app keeps rejecting my verification code. Error AADSTS50076.
+    label: {category: access_identity, impact: low, urgency: medium, priority: P4, assignment_group: identity_access, handling: auto}
+    rationale: "C1 MFA. I3 non-clinical. U1 medium. R2 MFA goes to identity_access."
+
+  - id: IND-006
+    subtype: standard
+    input:
+      channel: email
+      sender: tomas.lindqvist@contoso.example
+      subject: MFA prompt not arriving
+      body: |
+        The MFA prompt never arrives on my phone so I can't sign in to anything today.
+    label: {category: access_identity, impact: medium, urgency: medium, priority: P3, assignment_group: identity_access, handling: auto}
+    rationale: "C1 MFA. I2 clinical department (ICU). U1 medium. R2."
+
+  # ---------------------------------------------------------------- clinical_applications
+  - id: IND-007
+    subtype: standard
+    input:
+      channel: email
+      sender: dana.whitfield@contoso.example
+      subject: EMR freezing
+      body: |
+        The EMR freezes every time I open the medication administration record. Charting is impossible right now.
+
+        Dana Whitfield RN
+        Emergency
+    label: {category: clinical_applications, impact: medium, urgency: high, priority: P2, assignment_group: clinical_apps_support, handling: auto}
+    rationale: "C2 EMR. I2 clinical department (EMERG). U1 high. R1."
+
+  - id: IND-008
+    subtype: standard
+    input:
+      channel: email
+      sender: ahmed.haddad@contoso.example
+      subject: Lab results missing
+      body: |
+        Lab results are not showing up in the lab system since 9am. Error ERR-4012 when refreshing.
+    label: {category: clinical_applications, impact: medium, urgency: high, priority: P2, assignment_group: clinical_apps_support, handling: auto}
+    rationale: "C2 lab system. I2 clinical department (LAB). U1 high. R1."
+
+  - id: IND-009
+    subtype: standard
+    input:
+      channel: email
+      sender: hannah.brooks@contoso.example
+      subject: PACS viewer not loading
+      body: |
+        PACS imaging viewer won't load studies, it just spins.
+    label: {category: clinical_applications, impact: medium, urgency: high, priority: P2, assignment_group: clinical_apps_support, handling: auto}
+    rationale: "C2 imaging. I2 clinical department (DI). U1 high. R1."
+
+  - id: IND-010
+    subtype: standard
+    input:
+      channel: web_form
+      sender: sofia.marchetti@contoso.example
+      subject: Pharmacy system error
+      body: |
+        The pharmacy system shows an error every time I verify an order.
+    label: {category: clinical_applications, impact: medium, urgency: high, priority: P2, assignment_group: clinical_apps_support, handling: auto}
+    rationale: "C2 pharmacy application. I2 clinical department (PHARM). U1 high. R1."
+
+  - id: IND-011
+    subtype: standard
+    input:
+      channel: email
+      sender: marcus.oyelaran@contoso.example
+      subject: Order entry timing out
+      body: |
+        Order entry in the EMR keeps timing out for the whole department since 10:00.
+    label: {category: clinical_applications, impact: high, urgency: high, priority: P1, assignment_group: clinical_apps_support, handling: auto}
+    rationale: "C2 EMR. I1 whole department affected. U1 high. R1."
+
+  - id: IND-012
+    subtype: standard
+    input:
+      channel: email
+      sender: liam.chen@contoso.example
+      subject: EMR login
+      body: |
+        I can't log in to the EMR, it keeps saying my EMR password is wrong.
+    label: {category: clinical_applications, impact: medium, urgency: high, priority: P2, assignment_group: clinical_apps_support, handling: auto}
+    rationale: "C2 sign-in to a clinical application, not access_identity. I2 clinical department (MED4B). U1 high. R1."
+
+  # ---------------------------------------------------------------- clinical_devices
+  - id: IND-013
+    subtype: standard
+    input:
+      channel: email
+      sender: priya.raman@contoso.example
+      subject: Barcode scanner not reading
+      body: |
+        The barcode scanner CH-SCN-00004 won't read patient wristbands.
+    label: {category: clinical_devices, impact: medium, urgency: high, priority: P2, assignment_group: clinical_engineering, handling: auto}
+    rationale: "C3 barcode scanner. I2 clinical department and fleet device. U1 high. R1."
+
+  - id: IND-014
+    subtype: standard
+    input:
+      channel: email
+      sender: grace.okafor@contoso.example
+      subject: Wristband printer blank
+      body: |
+        Wristband printer CH-PRN-00011 at admitting is printing blank labels.
+    label: {category: clinical_devices, impact: medium, urgency: high, priority: P2, assignment_group: clinical_engineering, handling: auto}
+    rationale: "C3 wristband printer. I2. U1 high. R1."
+
+  - id: IND-015
+    subtype: standard
+    input:
+      channel: email
+      sender: liam.chen@contoso.example
+      subject: WOW battery
+      body: |
+        Workstation on wheels CH-WOW-00008 battery dies after about 20 minutes.
+    label: {category: clinical_devices, impact: medium, urgency: high, priority: P2, assignment_group: clinical_engineering, handling: auto}
+    rationale: "C3 workstation on wheels. I2. U1 high. R1."
+
+  - id: IND-016
+    subtype: standard
+    input:
+      channel: email
+      sender: dana.whitfield@contoso.example
+      subject: Med cart computer
+      body: |
+        The medication cart computer in bay 2 won't turn on.
+    label: {category: clinical_devices, impact: medium, urgency: high, priority: P2, assignment_group: clinical_engineering, handling: auto}
+    rationale: "C3 medication cart computer. I2. U1 high. R1."
+
+  - id: IND-017
+    subtype: standard
+    input:
+      channel: email
+      sender: tomas.lindqvist@contoso.example
+      subject: Label printer jammed
+      body: |
+        Label printer in the ICU med room is jammed and won't feed.
+    label: {category: clinical_devices, impact: medium, urgency: high, priority: P2, assignment_group: clinical_engineering, handling: auto}
+    rationale: "C3 label printer on a care unit. I2. U1 high. R1."
+
+  - id: IND-018
+    subtype: standard
+    input:
+      channel: email
+      sender: priya.raman@contoso.example
+      subject: Scanners down on unit
+      body: |
+        Every barcode scanner on the entire unit stopped working after last night's update.
+    label: {category: clinical_devices, impact: high, urgency: high, priority: P1, assignment_group: clinical_engineering, handling: auto}
+    rationale: "C3. I1 entire unit affected. U1 high. R1."
+
+  # ---------------------------------------------------------------- end_user_hardware
+  - id: IND-019
+    subtype: standard
+    input:
+      channel: email
+      sender: kevin.nguyen@contoso.example
+      subject: Blue screen
+      body: |
+        My laptop CH-LT-00042 shows a blue screen on startup.
+    label: {category: end_user_hardware, impact: low, urgency: medium, priority: P4, assignment_group: desktop_support, handling: auto}
+    rationale: "C1 laptop. I3 non-clinical. U1 medium. R1."
+
+  - id: IND-020
+    subtype: standard
+    input:
+      channel: web_form
+      sender: olivia.grant@contoso.example
+      subject: Monitor not detected
+      body: |
+        My docking station isn't detecting my monitor since this morning.
+    label: {category: end_user_hardware, impact: low, urgency: medium, priority: P4, assignment_group: desktop_support, handling: auto}
+    rationale: "C1 dock and monitor. I3. U1 medium. R1."
+
+  - id: IND-021
+    subtype: standard
+    input:
+      channel: email
+      sender: grace.okafor@contoso.example
+      subject: Desktop won't turn on
+      body: |
+        Desktop CH-DT-00110 at the unit desk won't turn on.
+    label: {category: end_user_hardware, impact: medium, urgency: medium, priority: P3, assignment_group: desktop_support, handling: auto}
+    rationale: "C1 desktop. I2 clinical department (MED4B). U1 medium. R1."
+
+  - id: IND-022
+    subtype: standard
+    input:
+      channel: email
+      sender: ahmed.haddad@contoso.example
+      subject: Keyboard and mouse
+      body: |
+        Keyboard and mouse stopped working on desktop CH-DT-00111.
+    label: {category: end_user_hardware, impact: medium, urgency: medium, priority: P3, assignment_group: desktop_support, handling: auto}
+    rationale: "C1 peripherals. I2 clinical department (LAB). U1 medium. R1."
+
+  - id: IND-023
+    subtype: standard
+    input:
+      channel: email
+      sender: rebecca.stone@contoso.example
+      subject: Headset mic
+      body: |
+        My headset microphone isn't picking up my voice.
+    label: {category: end_user_hardware, impact: low, urgency: medium, priority: P4, assignment_group: desktop_support, handling: auto}
+    rationale: "C1 headset. I3. U1 medium. R1."
+
+  - id: IND-024
+    subtype: standard
+    input:
+      channel: email
+      sender: hannah.brooks@contoso.example
+      subject: Laptop overheating
+      body: |
+        Laptop CH-LT-00044 fan is very loud and it overheats within an hour.
+    label: {category: end_user_hardware, impact: medium, urgency: medium, priority: P3, assignment_group: desktop_support, handling: auto}
+    rationale: "C1 laptop. I2 clinical department (DI). U1 medium. R1."
+
+  # ---------------------------------------------------------------- network_connectivity
+  - id: IND-025
+    subtype: standard
+    input:
+      channel: email
+      sender: kevin.nguyen@contoso.example
+      subject: "RE: VPN disconnects"
+      body: |
+        VPN still disconnects every 15 minutes when I work from home, even after restarting the client.
+
+        On Fri, 11 Sep 2026, IT Service Desk wrote:
+        > Please restart the VPN client and try again.
+    label: {category: network_connectivity, impact: low, urgency: medium, priority: P4, assignment_group: network_operations, handling: auto}
+    rationale: "C7 VPN. I3. U1 medium. R1."
+
+  - id: IND-026
+    subtype: standard
+    input:
+      channel: email
+      sender: olivia.grant@contoso.example
+      subject: Remote access
+      body: |
+        Can't connect to remote access from home. Citrix says the gateway is unavailable.
+    label: {category: network_connectivity, impact: low, urgency: medium, priority: P4, assignment_group: network_operations, handling: auto}
+    rationale: "C7 remote access. I3. U1 medium. R1."
+
+  - id: IND-027
+    subtype: standard
+    input:
+      channel: email
+      sender: tomas.lindqvist@contoso.example
+      subject: Wifi dropping
+      body: |
+        Wifi keeps dropping in the ICU staff room.
+    label: {category: network_connectivity, impact: medium, urgency: medium, priority: P3, assignment_group: network_operations, handling: auto}
+    rationale: "C1 wifi. I2 clinical department (ICU). U1 medium. R1."
+
+  - id: IND-028
+    subtype: standard
+    input:
+      channel: web_form
+      sender: samir.patel@contoso.example
+      subject: No internet in room 204
+      body: |
+        The ethernet port in room 204 gives no internet.
+    label: {category: network_connectivity, impact: low, urgency: medium, priority: P4, assignment_group: network_operations, handling: auto}
+    rationale: "C1 wired network. I3. U1 medium. R1."
+
+  - id: IND-029
+    subtype: standard
+    input:
+      channel: email
+      sender: marcus.oyelaran@contoso.example
+      subject: Wireless down
+      body: |
+        Wireless network is down for all staff in the emergency department.
+    label: {category: network_connectivity, impact: high, urgency: medium, priority: P2, assignment_group: network_operations, handling: auto}
+    rationale: "C1 wireless. I1 all staff in a department. U1 medium; no statement that care is blocked, so no U2. R1."
+
+  - id: IND-030
+    subtype: standard
+    input:
+      channel: email
+      sender: rebecca.stone@contoso.example
+      subject: VPN authentication failed
+      body: |
+        The VPN client says authentication failed even though my password works everywhere else.
+    label: {category: network_connectivity, impact: low, urgency: medium, priority: P4, assignment_group: network_operations, handling: auto}
+    rationale: "C7 VPN. I3. U1 medium. R1."
+
+  # ---------------------------------------------------------------- email_collaboration
+  - id: IND-031
+    subtype: standard
+    input:
+      channel: email
+      sender: kevin.nguyen@contoso.example
+      subject: Outlook password prompts
+      body: |
+        Outlook keeps asking for my password every few minutes.
+    label: {category: email_collaboration, impact: low, urgency: low, priority: P4, assignment_group: collaboration_platforms, handling: auto}
+    rationale: "C9 Outlook. I3. U1 low. R1."
+
+  - id: IND-032
+    subtype: standard
+    input:
+      channel: email
+      sender: olivia.grant@contoso.example
+      subject: Shared mailbox access
+      body: |
+        Please add me to the HR shared mailbox. My manager approved it.
+    label: {category: email_collaboration, impact: low, urgency: low, priority: P4, assignment_group: collaboration_platforms, handling: auto}
+    rationale: "C9 shared team mailbox, not another person's (no E2). I3. U1 low. R1."
+
+  - id: IND-033
+    subtype: standard
+    input:
+      channel: email
+      sender: sofia.marchetti@contoso.example
+      subject: Teams audio
+      body: |
+        Teams meetings drop audio after a few minutes.
+    label: {category: email_collaboration, impact: medium, urgency: low, priority: P4, assignment_group: collaboration_platforms, handling: auto}
+    rationale: "C9 Teams. I2 clinical department (PHARM). U1 low. R1."
+
+  - id: IND-034
+    subtype: standard
+    input:
+      channel: web_form
+      sender: rebecca.stone@contoso.example
+      subject: Calendar time zone
+      body: |
+        Calendar invites I send show the wrong time zone for attendees.
+    label: {category: email_collaboration, impact: low, urgency: low, priority: P4, assignment_group: collaboration_platforms, handling: auto}
+    rationale: "C9 calendar. I3. U1 low. R1."
+
+  - id: IND-035
+    subtype: standard
+    input:
+      channel: email
+      sender: ahmed.haddad@contoso.example
+      subject: Email bouncing
+      body: |
+        Email to our external lab partners bounces back undelivered.
+    label: {category: email_collaboration, impact: medium, urgency: low, priority: P4, assignment_group: collaboration_platforms, handling: auto}
+    rationale: "C9 email. I2 clinical department (LAB). U1 low. R1."
+
+  # ---------------------------------------------------------------- printing
+  - id: IND-036
+    subtype: standard
+    input:
+      channel: email
+      sender: kevin.nguyen@contoso.example
+      subject: Paper jam
+      body: |
+        Paper jam in printer CH-PRN-00020 on the 3rd floor.
+    label: {category: printing, impact: low, urgency: low, priority: P4, assignment_group: desktop_support, handling: auto}
+    rationale: "C1 office printer. I3. U1 low. R1."
+
+  - id: IND-037
+    subtype: standard
+    input:
+      channel: email
+      sender: rebecca.stone@contoso.example
+      subject: Print queue stuck
+      body: |
+        The print queue is stuck and nothing prints.
+    label: {category: printing, impact: low, urgency: low, priority: P4, assignment_group: desktop_support, handling: auto}
+    rationale: "C1 print queue. I3. U1 low. R1."
+
+  - id: IND-038
+    subtype: standard
+    input:
+      channel: email
+      sender: grace.okafor@contoso.example
+      subject: Toner low
+      body: |
+        Office printer CH-PRN-00021 at the nursing station says toner low and prints faded.
+    label: {category: printing, impact: medium, urgency: low, priority: P4, assignment_group: desktop_support, handling: auto}
+    rationale: "C1 office printer, not a clinical fleet device. I2 clinical department (MED4B). U1 low. R1."
+
+  - id: IND-039
+    subtype: standard
+    input:
+      channel: email
+      sender: olivia.grant@contoso.example
+      subject: Scan to email
+      body: |
+        Scan to email on the 2nd floor copier isn't sending anything.
+    label: {category: printing, impact: low, urgency: low, priority: P4, assignment_group: desktop_support, handling: auto}
+    rationale: "C4 scan-to-email. I3. U1 low. R1."
+
+  - id: IND-040
+    subtype: standard
+    input:
+      channel: email
+      sender: samir.patel@contoso.example
+      subject: Printing error
+      body: |
+        Printing from my laptop fails with error 0x00000709.
+    label: {category: printing, impact: low, urgency: low, priority: P4, assignment_group: desktop_support, handling: auto}
+    rationale: "C1 printing. I3. U1 low. R1."
+
+  # ---------------------------------------------------------------- software_request
+  - id: IND-041
+    subtype: standard
+    input:
+      channel: email
+      sender: kevin.nguyen@contoso.example
+      subject: Install Power BI
+      body: |
+        Please install Power BI Desktop on my laptop.
+    label: {category: software_request, impact: low, urgency: low, priority: P4, assignment_group: software_licensing, handling: auto}
+    rationale: "C1 install request. I3. U1 low. R1."
+
+  - id: IND-042
+    subtype: standard
+    input:
+      channel: web_form
+      sender: olivia.grant@contoso.example
+      subject: Visio licence
+      body: |
+        Software request: I need a Visio licence for org charts.
+    label: {category: software_request, impact: low, urgency: low, priority: P4, assignment_group: software_licensing, handling: auto}
+    rationale: "C1 licence. I3. U1 low. R1."
+
+  - id: IND-043
+    subtype: standard
+    input:
+      channel: email
+      sender: hannah.brooks@contoso.example
+      subject: Viewer upgrade
+      body: |
+        Can you upgrade my DICOM viewer to the latest version?
+    label: {category: software_request, impact: medium, urgency: low, priority: P4, assignment_group: software_licensing, handling: auto}
+    rationale: "C1 upgrade request, nothing broken. I2 clinical department (DI). U1 low. R1."
+
+  - id: IND-044
+    subtype: standard
+    input:
+      channel: email
+      sender: rebecca.stone@contoso.example
+      subject: Acrobat Pro
+      body: |
+        I need Adobe Acrobat Pro installed. Licence approved by my manager.
+    label: {category: software_request, impact: low, urgency: low, priority: P4, assignment_group: software_licensing, handling: auto}
+    rationale: "C1 install request. I3. U1 low. R1."
+
+  - id: IND-045
+    subtype: standard
+    input:
+      channel: email
+      sender: samir.patel@contoso.example
+      subject: Python installation
+      body: |
+        Installation of Python 3.12 needed on my workstation for scripting.
+    label: {category: software_request, impact: low, urgency: low, priority: P4, assignment_group: software_licensing, handling: auto}
+    rationale: "C1 install request. I3. U1 low. R1."
+
+  # ---------------------------------------------------------------- security_incident
+  - id: IND-046
+    subtype: standard
+    input:
+      channel: email
+      sender: kevin.nguyen@contoso.example
+      subject: Phishing
+      body: |
+        I received a phishing email pretending to be the CEO and asking for gift cards. I didn't reply.
+    label: {category: security_incident, impact: low, urgency: high, priority: P3, assignment_group: security_operations, handling: auto}
+    rationale: "C8 phishing. I3. U1 high. R1."
+
+  - id: IND-047
+    subtype: standard
+    input:
+      channel: email
+      sender: olivia.grant@contoso.example
+      subject: Laptop stolen
+      body: |
+        My laptop CH-LT-00043 was stolen from my car last night.
+    label: {category: security_incident, impact: low, urgency: high, priority: P3, assignment_group: security_operations, handling: auto}
+    rationale: "C8 stolen device. I3; no personal data mentioned, so no E1. U1 high. R1."
+
+  - id: IND-048
+    subtype: standard
+    input:
+      channel: email
+      sender: sofia.marchetti@contoso.example
+      subject: Malware detected
+      body: |
+        Antivirus popped up saying malware detected on the pharmacy desktop.
+    label: {category: security_incident, impact: medium, urgency: high, priority: P2, assignment_group: security_operations, handling: auto}
+    rationale: "C8 malware alert, not stated as spreading (no I1). I2 clinical department (PHARM). U1 high. R1."
+
+  - id: IND-049
+    subtype: standard
+    input:
+      channel: email
+      sender: samir.patel@contoso.example
+      subject: Account compromised
+      body: |
+        I think my account is compromised. I see sign-ins from another country.
+    label: {category: security_incident, impact: low, urgency: high, priority: P3, assignment_group: security_operations, handling: auto}
+    rationale: "C8 suspected compromise. I3. U1 high. R1."
+
+  - id: IND-050
+    subtype: standard
+    input:
+      channel: email
+      sender: ahmed.haddad@contoso.example
+      subject: Suspicious link
+      body: |
+        I clicked a suspicious link in an email before I realised. What should I do?
+    label: {category: security_incident, impact: medium, urgency: high, priority: P2, assignment_group: security_operations, handling: auto}
+    rationale: "C8 phishing click. I2 clinical department (LAB). U1 high. R1."

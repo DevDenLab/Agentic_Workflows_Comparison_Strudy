@@ -1,0 +1,564 @@
+# Golden set — out-of-distribution split.
+# The same kinds of problems, described the way busy staff actually write: no IT vocabulary,
+# symptoms instead of product names, typos, plurals, another language.
+# Labels follow docs/labelling-guide.md (service-desk policy), never rules.yaml.
+split: ood
+cases:
+  # ---------------------------------------------------------------- access_identity
+  - id: OOD-001
+    subtype: standard
+    input:
+      channel: email
+      sender: kevin.nguyen@contoso.example
+      subject: Can't get in
+      body: |
+        The computer keeps telling me my login is wrong even though I typed it five times, and now it won't let me try again.
+    label: {category: access_identity, impact: low, urgency: medium, priority: P4, assignment_group: service_desk_l1, handling: auto}
+    rationale: "C1 lockout. I3. U1 medium. R1."
+
+  - id: OOD-002
+    subtype: standard
+    input:
+      channel: email
+      sender: grace.okafor@contoso.example
+      subject: windows
+      body: |
+        hi, cant get into windows this am, says i need a new pasword but the new one isnt accepted
+    label: {category: access_identity, impact: medium, urgency: medium, priority: P3, assignment_group: service_desk_l1, handling: auto}
+    rationale: "C1 password change failing. I2 clinical department (MED4B). U1 medium. R1."
+
+  - id: OOD-003
+    subtype: standard
+    input:
+      channel: email
+      sender: rebecca.stone@contoso.example
+      subject: New phone
+      body: |
+        The code thing on my phone stopped giving me numbers after I switched to a new phone, so I can't get past the sign-in screen.
+    label: {category: access_identity, impact: low, urgency: medium, priority: P4, assignment_group: identity_access, handling: auto}
+    rationale: "C1 MFA. I3. U1 medium. R2 MFA."
+
+  - id: OOD-004
+    subtype: standard
+    input:
+      channel: email
+      sender: olivia.grant@contoso.example
+      subject: New starter Monday
+      body: |
+        We have a new hire starting Monday in Payroll. She needs a network account and email set up before then.
+    label: {category: access_identity, impact: low, urgency: low, priority: P4, assignment_group: identity_access, handling: auto}
+    rationale: "C6 provisioning. I3. U3 request for a future date. R2 provisioning."
+
+  - id: OOD-005
+    subtype: standard
+    input:
+      channel: web_form
+      sender: samir.patel@contoso.example
+      subject: Project folder
+      body: |
+        Please add me to the group for the ITS project folder on the shared drive. My lead approved it.
+    label: {category: access_identity, impact: low, urgency: low, priority: P4, assignment_group: identity_access, handling: auto}
+    rationale: "C6 group membership. I3. U3 request. R2."
+
+  - id: OOD-046
+    subtype: standard
+    input:
+      channel: email
+      sender: grace.okafor@contoso.example
+      subject: Connexion
+      body: |
+        Bonjour, je ne peux plus me connecter à mon compte, mon mot de passe est refusé.
+    label: {category: access_identity, impact: medium, urgency: medium, priority: P3, assignment_group: service_desk_l1, handling: auto}
+    rationale: "C1 password refused (French). I2 clinical department (MED4B). U1 medium. R1."
+
+  - id: OOD-050
+    subtype: standard
+    input:
+      channel: email
+      sender: sofia.marchetti@contoso.example
+      subject: Access denied
+      body: |
+        Our team can't open any of the shared pharmacy spreadsheets on the network drive, it says access denied.
+    label: {category: access_identity, impact: high, urgency: medium, priority: P2, assignment_group: identity_access, handling: auto}
+    rationale: "C6 permissions. I1 whole team affected. U1 medium; a fault, not a request. R2 permissions."
+
+  # ---------------------------------------------------------------- clinical_applications
+  - id: OOD-006
+    subtype: standard
+    input:
+      channel: email
+      sender: dana.whitfield@contoso.example
+      subject: Keeps kicking me out
+      body: |
+        The patient chart program kicks me out every time I try to sign a note. Lost two notes already this shift.
+    label: {category: clinical_applications, impact: medium, urgency: high, priority: P2, assignment_group: clinical_apps_support, handling: auto}
+    rationale: "C2 EMR. I2 clinical department (EMERG). U1 high. R1."
+
+  - id: OOD-007
+    subtype: standard
+    input:
+      channel: email
+      sender: ahmed.haddad@contoso.example
+      subject: Results not reaching doctors
+      body: |
+        Results we release aren't reaching the doctors' inbox in the patient record.
+    label: {category: clinical_applications, impact: medium, urgency: high, priority: P2, assignment_group: clinical_apps_support, handling: auto}
+    rationale: "C2 lab-to-EMR results. I2 clinical department (LAB). U1 high. R1."
+
+  - id: OOD-008
+    subtype: standard
+    input:
+      channel: email
+      sender: hannah.brooks@contoso.example
+      subject: X-rays won't open
+      body: |
+        X-rays from this morning won't open on my reading station, just a grey box.
+    label: {category: clinical_applications, impact: medium, urgency: high, priority: P2, assignment_group: clinical_apps_support, handling: auto}
+    rationale: "C2 imaging. I2 clinical department (DI). U1 high. R1."
+
+  - id: OOD-009
+    subtype: standard
+    input:
+      channel: email
+      sender: sofia.marchetti@contoso.example
+      subject: Verification screen
+      body: |
+        The verification screen won't load new orders for any of us in pharmacy.
+    label: {category: clinical_applications, impact: high, urgency: high, priority: P1, assignment_group: clinical_apps_support, handling: auto}
+    rationale: "C2 pharmacy application. I1 everyone in pharmacy. U1 high. R1."
+
+  - id: OOD-010
+    subtype: standard
+    input:
+      channel: email
+      sender: marcus.oyelaran@contoso.example
+      subject: Bloodwork orders
+      body: |
+        Doctors can't put in bloodwork requests, the order screen errors out. We're using paper requisitions for now.
+    label: {category: clinical_applications, impact: high, urgency: high, priority: P1, assignment_group: clinical_apps_support, handling: auto}
+    rationale: "C2 order entry. I1 multiple doctors. U1 high (U2 also applies: paper procedures). R1."
+
+  - id: OOD-011
+    subtype: standard
+    input:
+      channel: email
+      sender: liam.chen@contoso.example
+      subject: Meds due list blank
+      body: |
+        The meds due list for my patients has been blank since shift change.
+    label: {category: clinical_applications, impact: medium, urgency: high, priority: P2, assignment_group: clinical_apps_support, handling: auto}
+    rationale: "C2 medication administration record. I2 clinical department (MED4B). U1 high. R1."
+
+  - id: OOD-047
+    subtype: standard
+    input:
+      channel: email
+      sender: ahmed.haddad@contoso.example
+      subject: Analyzer interface
+      body: |
+        The analyzer interface to the results system has been down since 6. Techs are hand-entering results.
+    label: {category: clinical_applications, impact: high, urgency: high, priority: P1, assignment_group: clinical_apps_support, handling: auto}
+    rationale: "C2 lab system interface. I1 multiple techs. U1 high (U2 also applies: manual procedures). R1."
+
+  # ---------------------------------------------------------------- clinical_devices
+  - id: OOD-012
+    subtype: standard
+    input:
+      channel: email
+      sender: liam.chen@contoso.example
+      subject: Cart shutting off
+      body: |
+        The computer on the rolling cart in room 9 shuts off by itself in the middle of the med pass.
+    label: {category: clinical_devices, impact: medium, urgency: high, priority: P2, assignment_group: clinical_engineering, handling: auto}
+    rationale: "C3 computer cart. I2. U1 high. R1."
+
+  - id: OOD-013
+    subtype: standard
+    input:
+      channel: email
+      sender: priya.raman@contoso.example
+      subject: Armbands not scanning
+      body: |
+        Our scanners won't pick up the barcodes on the new armbands.
+    label: {category: clinical_devices, impact: medium, urgency: high, priority: P2, assignment_group: clinical_engineering, handling: auto}
+    rationale: "C3 barcode scanners. I2; 'our scanners' is devices, not a statement that multiple people are blocked. U1 high. R1."
+
+  - id: OOD-014
+    subtype: standard
+    input:
+      channel: email
+      sender: grace.okafor@contoso.example
+      subject: ID band printer
+      body: |
+        The little printer that makes patient ID bands is spitting out blank stickers.
+    label: {category: clinical_devices, impact: medium, urgency: high, priority: P2, assignment_group: clinical_engineering, handling: auto}
+    rationale: "C3 wristband printer, not office printing. I2. U1 high. R1."
+
+  - id: OOD-015
+    subtype: standard
+    input:
+      channel: email
+      sender: tomas.lindqvist@contoso.example
+      subject: Charting cart battery
+      body: |
+        The battery on the charting cart in bay 3 is dead by 10am every day.
+    label: {category: clinical_devices, impact: medium, urgency: high, priority: P2, assignment_group: clinical_engineering, handling: auto}
+    rationale: "C3 computer cart. I2. U1 high. R1."
+
+  - id: OOD-016
+    subtype: standard
+    input:
+      channel: email
+      sender: dana.whitfield@contoso.example
+      subject: Scanning guns
+      body: |
+        None of the handheld scanning guns in emerg will connect today.
+    label: {category: clinical_devices, impact: high, urgency: high, priority: P1, assignment_group: clinical_engineering, handling: auto}
+    rationale: "C3 barcode scanners. I1 none work across the department. U1 high. R1."
+
+  # ---------------------------------------------------------------- end_user_hardware
+  - id: OOD-017
+    subtype: standard
+    input:
+      channel: email
+      sender: kevin.nguyen@contoso.example
+      subject: Clicking noise
+      body: |
+        My computer makes a clicking noise and then freezes.
+    label: {category: end_user_hardware, impact: low, urgency: medium, priority: P4, assignment_group: desktop_support, handling: auto}
+    rationale: "C1 computer. I3. U1 medium. R1."
+
+  - id: OOD-018
+    subtype: standard
+    input:
+      channel: web_form
+      sender: rebecca.stone@contoso.example
+      subject: Second screen
+      body: |
+        Second screen went dark and won't wake up.
+    label: {category: end_user_hardware, impact: low, urgency: medium, priority: P4, assignment_group: desktop_support, handling: auto}
+    rationale: "C1 monitor. I3. U1 medium. R1."
+
+  - id: OOD-019
+    subtype: standard
+    input:
+      channel: email
+      sender: olivia.grant@contoso.example
+      subject: Coffee spill
+      body: |
+        Spilled coffee on my notebook, now some of the keys don't type.
+    label: {category: end_user_hardware, impact: low, urgency: medium, priority: P4, assignment_group: desktop_support, handling: auto}
+    rationale: "C1 laptop keyboard. I3. U1 medium. R1."
+
+  - id: OOD-020
+    subtype: standard
+    input:
+      channel: email
+      sender: ahmed.haddad@contoso.example
+      subject: Bench PC restarting
+      body: |
+        The PC at the specimen bench restarts on its own every hour or so.
+    label: {category: end_user_hardware, impact: medium, urgency: medium, priority: P3, assignment_group: desktop_support, handling: auto}
+    rationale: "C1 desktop. I2 clinical department (LAB). U1 medium. R1."
+
+  - id: OOD-021
+    subtype: standard
+    input:
+      channel: email
+      sender: hannah.brooks@contoso.example
+      subject: Earpiece
+      body: |
+        Can't hear anything through my earpiece on the reading room PC.
+    label: {category: end_user_hardware, impact: medium, urgency: medium, priority: P3, assignment_group: desktop_support, handling: auto}
+    rationale: "C1 headset. I2 clinical department (DI). U1 medium. R1."
+
+  - id: OOD-048
+    subtype: standard
+    input:
+      channel: email
+      sender: kevin.nguyen@contoso.example
+      subject: Excel crashing
+      body: |
+        Excel crashes whenever I open the budget workbook.
+    label: {category: end_user_hardware, impact: low, urgency: medium, priority: P4, assignment_group: desktop_support, handling: auto}
+    rationale: "C5 desktop software fault. I3. U1 medium. R1."
+
+  - id: OOD-049
+    subtype: standard
+    input:
+      channel: email
+      sender: tomas.lindqvist@contoso.example
+      subject: Crackling headphones
+      body: |
+        The headphones for the dictation PC in the ICU office crackle constantly.
+    label: {category: end_user_hardware, impact: medium, urgency: medium, priority: P3, assignment_group: desktop_support, handling: auto}
+    rationale: "C1 headset. I2 clinical department (ICU). U1 medium. R1."
+
+  # ---------------------------------------------------------------- network_connectivity
+  - id: OOD-022
+    subtype: standard
+    input:
+      channel: email
+      sender: kevin.nguyen@contoso.example
+      subject: Work sites from home
+      body: |
+        Working from home and none of the work sites load, but everything else on the internet works fine.
+    label: {category: network_connectivity, impact: low, urgency: medium, priority: P4, assignment_group: network_operations, handling: auto}
+    rationale: "C7 remote access. I3. U1 medium. R1."
+
+  - id: OOD-023
+    subtype: standard
+    input:
+      channel: email
+      sender: tomas.lindqvist@contoso.example
+      subject: Tablet signal
+      body: |
+        My tablet keeps losing signal in the east hallway.
+    label: {category: network_connectivity, impact: medium, urgency: medium, priority: P3, assignment_group: network_operations, handling: auto}
+    rationale: "C1 wireless. I2 clinical department (ICU). U1 medium. R1."
+
+  - id: OOD-024
+    subtype: standard
+    input:
+      channel: email
+      sender: samir.patel@contoso.example
+      subject: Dead jack
+      body: |
+        The jack in meeting room B is dead, my laptop says cable unplugged.
+    label: {category: network_connectivity, impact: low, urgency: medium, priority: P4, assignment_group: network_operations, handling: auto}
+    rationale: "C1 wired network port, not the laptop. I3. U1 medium. R1."
+
+  - id: OOD-025
+    subtype: standard
+    input:
+      channel: email
+      sender: marcus.oyelaran@contoso.example
+      subject: Emerg offline
+      body: |
+        Nobody in emerg can get online, every computer says no connection. We're on downtime forms.
+    label: {category: network_connectivity, impact: high, urgency: high, priority: P1, assignment_group: network_operations, handling: auto}
+    rationale: "C1 network. I1 whole department. U2 downtime procedures raise to high. R1."
+
+  - id: OOD-026
+    subtype: standard
+    input:
+      channel: email
+      sender: olivia.grant@contoso.example
+      subject: Secure tunnel app
+      body: |
+        The secure tunnel app on my laptop just spins at 'connecting'.
+    label: {category: network_connectivity, impact: low, urgency: medium, priority: P4, assignment_group: network_operations, handling: auto}
+    rationale: "C7 VPN client. I3. U1 medium. R1."
+
+  - id: OOD-045
+    subtype: standard
+    input:
+      channel: email
+      sender: liam.chen@contoso.example
+      subject: Internet on 4B
+      body: |
+        Internet on 4B keeps cutting out for all the nurses' phones.
+    label: {category: network_connectivity, impact: high, urgency: medium, priority: P2, assignment_group: network_operations, handling: auto}
+    rationale: "C1 wireless. I1 all nurses on the unit. U1 medium; care not stated as blocked. R1."
+
+  # ---------------------------------------------------------------- email_collaboration
+  - id: OOD-027
+    subtype: standard
+    input:
+      channel: email
+      sender: rebecca.stone@contoso.example
+      subject: Undeliverable
+      body: |
+        Messages I send to the payroll inbox come back as undeliverable.
+    label: {category: email_collaboration, impact: low, urgency: low, priority: P4, assignment_group: collaboration_platforms, handling: auto}
+    rationale: "C9 mailbox. I3. U1 low. R1."
+
+  - id: OOD-028
+    subtype: standard
+    input:
+      channel: email
+      sender: sofia.marchetti@contoso.example
+      subject: Chat status
+      body: |
+        The chat app won't show my colleagues' status anymore.
+    label: {category: email_collaboration, impact: medium, urgency: low, priority: P4, assignment_group: collaboration_platforms, handling: auto}
+    rationale: "C9 Teams. I2 clinical department (PHARM). U1 low. R1."
+
+  - id: OOD-029
+    subtype: standard
+    input:
+      channel: email
+      sender: kevin.nguyen@contoso.example
+      subject: Reminders
+      body: |
+        Meeting reminders stopped popping up on my computer.
+    label: {category: email_collaboration, impact: low, urgency: low, priority: P4, assignment_group: collaboration_platforms, handling: auto}
+    rationale: "C9 calendar. I3. U1 low. R1."
+
+  - id: OOD-030
+    subtype: standard
+    input:
+      channel: email
+      sender: samir.patel@contoso.example
+      subject: Mailbox full
+      body: |
+        My mailbox is full and I can't receive anything.
+    label: {category: email_collaboration, impact: low, urgency: low, priority: P4, assignment_group: collaboration_platforms, handling: auto}
+    rationale: "C9 mailbox. I3. U1 low. R1."
+
+  - id: OOD-031
+    subtype: standard
+    input:
+      channel: email
+      sender: grace.okafor@contoso.example
+      subject: Family video calls
+      body: |
+        Video calls with patients' families drop after a minute and they see a frozen picture.
+    label: {category: email_collaboration, impact: medium, urgency: low, priority: P4, assignment_group: collaboration_platforms, handling: auto}
+    rationale: "C9 Teams calls. I2 clinical department (MED4B). U1 low; care not stated as blocked. R1."
+
+  # ---------------------------------------------------------------- printing
+  - id: OOD-032
+    subtype: standard
+    input:
+      channel: email
+      sender: kevin.nguyen@contoso.example
+      subject: Streaky copies
+      body: |
+        The copier on 3 says 'replace drum' and pages come out streaky.
+    label: {category: printing, impact: low, urgency: low, priority: P4, assignment_group: desktop_support, handling: auto}
+    rationale: "C4 copier. I3. U1 low. R1."
+
+  - id: OOD-033
+    subtype: standard
+    input:
+      channel: email
+      sender: olivia.grant@contoso.example
+      subject: HR machine
+      body: |
+        Nothing I send to the HR machine comes out.
+    label: {category: printing, impact: low, urgency: low, priority: P4, assignment_group: desktop_support, handling: auto}
+    rationale: "C1 office printer. I3. U1 low. R1."
+
+  - id: OOD-034
+    subtype: standard
+    input:
+      channel: email
+      sender: rebecca.stone@contoso.example
+      subject: Scans not arriving
+      body: |
+        The big machine by the kitchen isn't emailing me my scans.
+    label: {category: printing, impact: low, urgency: low, priority: P4, assignment_group: desktop_support, handling: auto}
+    rationale: "C4 scan-to-email. I3. U1 low. R1."
+
+  - id: OOD-035
+    subtype: standard
+    input:
+      channel: email
+      sender: samir.patel@contoso.example
+      subject: Pages stuck
+      body: |
+        Pages are stuck halfway out of the copier on floor 2.
+    label: {category: printing, impact: low, urgency: low, priority: P4, assignment_group: desktop_support, handling: auto}
+    rationale: "C4 copier. I3. U1 low. R1."
+
+  # ---------------------------------------------------------------- software_request
+  - id: OOD-036
+    subtype: standard
+    input:
+      channel: web_form
+      sender: kevin.nguyen@contoso.example
+      subject: Stats package
+      body: |
+        Could I get the stats package the analytics team uses? My manager signed off.
+    label: {category: software_request, impact: low, urgency: low, priority: P4, assignment_group: software_licensing, handling: auto}
+    rationale: "C1 software request. I3. U1 low. R1."
+
+  - id: OOD-037
+    subtype: standard
+    input:
+      channel: email
+      sender: hannah.brooks@contoso.example
+      subject: Dictation version
+      body: |
+        I need the newer version of the dictation program, mine is two releases behind.
+    label: {category: software_request, impact: medium, urgency: low, priority: P4, assignment_group: software_licensing, handling: auto}
+    rationale: "C1 upgrade request. I2 clinical department (DI). U1 low. R1."
+
+  - id: OOD-038
+    subtype: standard
+    input:
+      channel: email
+      sender: olivia.grant@contoso.example
+      subject: PDF editor
+      body: |
+        Can you put a PDF editor on my machine?
+    label: {category: software_request, impact: low, urgency: low, priority: P4, assignment_group: software_licensing, handling: auto}
+    rationale: "C1 install request. I3. U1 low. R1."
+
+  - id: OOD-039
+    subtype: standard
+    input:
+      channel: email
+      sender: ahmed.haddad@contoso.example
+      subject: Microscope camera
+      body: |
+        Our microscope camera software needs to go on the new bench PC.
+    label: {category: software_request, impact: medium, urgency: low, priority: P4, assignment_group: software_licensing, handling: auto}
+    rationale: "C1 install request. I2 clinical department (LAB). U1 low. R1."
+
+  # ---------------------------------------------------------------- security_incident
+  - id: OOD-040
+    subtype: standard
+    input:
+      channel: email
+      sender: kevin.nguyen@contoso.example
+      subject: Weird message
+      body: |
+        Got a weird message saying my mailbox will be deleted unless I click and log in. Looks fake.
+    label: {category: security_incident, impact: low, urgency: high, priority: P3, assignment_group: security_operations, handling: auto}
+    rationale: "C8 phishing. I3. U1 high. R1."
+
+  - id: OOD-041
+    subtype: standard
+    input:
+      channel: email
+      sender: rebecca.stone@contoso.example
+      subject: Phone in taxi
+      body: |
+        Left my work phone in a taxi last night.
+    label: {category: security_incident, impact: low, urgency: high, priority: P3, assignment_group: security_operations, handling: auto}
+    rationale: "C8 lost device. I3. U1 high. R1."
+
+  - id: OOD-042
+    subtype: standard
+    input:
+      channel: email
+      sender: samir.patel@contoso.example
+      subject: Files locked
+      body: |
+        My screen suddenly says all my files are locked and I need to pay in bitcoin to get them back.
+    label: {category: security_incident, impact: high, urgency: high, priority: P1, assignment_group: security_operations, handling: auto}
+    rationale: "C8 ransomware. I1 ransomware is high impact. U1 high. R1."
+
+  - id: OOD-043
+    subtype: standard
+    input:
+      channel: email
+      sender: dana.whitfield@contoso.example
+      subject: Fake IT call
+      body: |
+        Someone called pretending to be IT and asked for my login code. I gave it to them before I realised.
+    label: {category: security_incident, impact: medium, urgency: high, priority: P2, assignment_group: security_operations, handling: auto}
+    rationale: "C8 social engineering, likely compromise. I2 clinical department (EMERG). U1 high. R1."
+
+  - id: OOD-044
+    subtype: standard
+    input:
+      channel: email
+      sender: olivia.grant@contoso.example
+      subject: Bag snatched
+      body: |
+        My bag got snatched on the train. The company tablet was in it.
+    label: {category: security_incident, impact: low, urgency: high, priority: P3, assignment_group: security_operations, handling: auto}
+    rationale: "C8 stolen device; no personal data mentioned. I3. U1 high. R1."
