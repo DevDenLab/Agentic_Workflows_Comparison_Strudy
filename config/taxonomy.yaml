@@ -1,0 +1,44 @@
+# Allow-list of every value a triage decision may contain.
+# v1's routing table and v2's output guardrail both validate against this file.
+# Changing it changes behaviour: bump `version`, open a PR, re-run the benchmark.
+version: 1.0.0
+
+categories:
+  - id: access_identity
+    description: Password resets, account lockouts, MFA enrolment and prompts
+  - id: clinical_applications
+    description: EMR, lab, pharmacy and imaging application errors or access
+  - id: clinical_devices
+    description: Workstations on wheels, barcode scanners, wristband and label printers on care units
+  - id: end_user_hardware
+    description: Laptops, desktops, monitors, docks, keyboards, mice, headsets
+  - id: printing
+    description: Office printers, print queues, scan-to-email
+  - id: network_connectivity
+    description: VPN, Wi-Fi, wired network, remote access
+  - id: email_collaboration
+    description: Email, shared mailboxes, calendars, Teams
+  - id: software_request
+    description: New software installs, licences, version upgrades
+  - id: security_incident
+    description: Phishing, suspected compromise, lost or stolen devices, malware alerts
+
+assignment_groups:
+  - id: service_desk_l1
+    description: First-line service desk; password resets and how-to questions
+  - id: identity_access
+    description: Account provisioning, MFA, role and group changes
+  - id: clinical_apps_support
+    description: EMR and clinical application analysts
+  - id: clinical_engineering
+    description: Clinical device fleet on patient care units
+  - id: desktop_support
+    description: End-user hardware and printing
+  - id: network_operations
+    description: VPN, Wi-Fi and LAN
+  - id: collaboration_platforms
+    description: Email and Teams administrators
+  - id: software_licensing
+    description: Software packaging, deployment and licence management
+  - id: security_operations
+    description: Security operations centre; phishing, incident response, device loss

@@ -1,0 +1,9 @@
+Message-ID: <sample-004@contoso.example>
+Date: Mon, 14 Sep 2026 11:30:00 -0600
+From: Olivia Grant <olivia.grant@contoso.example>
+To: servicedesk@contoso.example
+Subject: Can't sign in
+MIME-Version: 1.0
+Content-Type: text/html; charset=utf-8
+
+<html><body><p>The authenticator app keeps saying my verification code is wrong.</p><p>Error: AADSTS50076</p><p>Kind regards,<br>Olivia</p></body></html>

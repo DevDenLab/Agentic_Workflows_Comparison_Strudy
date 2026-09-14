@@ -1,0 +1,168 @@
+{
+  "spec_version": "art-direction/1.0",
+  "diagram_id": "v1_conventional_automation",
+  "title": "Conventional Automation — IT Service-Desk Ticket Triage",
+  "subtitle": "Deterministic rule-driven pipeline. Same input always produces the same output.",
+  "aspect_ratio": "16:9",
+
+  "art_direction": {
+    "reference_style": "AWS / Azure reference-architecture diagram",
+    "rendering_note": "Clean flat vector, white background, no 3D, no isometric, no photorealism, no gradients on boxes.",
+    "background": "pure white with a very faint light-grey dot grid",
+    "box_style": "white rounded-rectangle card, 2px coloured border, soft shadow, coloured square icon tile in the top-left corner of the card",
+    "icon_tile": "48x48 rounded square filled with the component's accent colour, containing a simple white line-art glyph",
+    "step_badge": "small filled circle with a white number, sitting on the top-left edge of each card, in the card's accent colour",
+    "arrows": "thin dark-grey orthogonal arrows with solid triangular heads and short italic labels in grey",
+    "typography": "Inter / Helvetica. Titles bold dark navy. Card names bold 18px dark navy. One short grey caption line per card, max 6 words.",
+    "layout_rule": "One clear left-to-right flow across the frame in a single main row, with the fallback outcome dropped below the main row on the right. Generous whitespace. Do NOT stack cards densely."
+  },
+
+  "color_key": {
+    "intake": "#2D6CDF",
+    "processing": "#0F9D58",
+    "decision_logic": "#7A3FBF",
+    "datastore": "#E08A1E",
+    "action": "#137C8B",
+    "human_fallback": "#D93838"
+  },
+
+  "groups": [
+    {
+      "id": "grp_rules",
+      "label": "Decision layer — all logic lives in rules.yaml",
+      "contains": ["rule_engine", "priority_matrix", "routing_table"],
+      "style": "dashed purple rounded boundary drawn around these three cards, label in small purple text at the top-left of the boundary"
+    }
+  ],
+
+  "components": [
+    {
+      "id": "intake",
+      "step": 1,
+      "name": "Intake",
+      "caption": "Email + web form",
+      "role": "intake",
+      "icon_description": "a simple open envelope outline with a small arrow entering it",
+      "position": "far left, main row"
+    },
+    {
+      "id": "queue",
+      "step": 2,
+      "name": "Queue & Dedupe",
+      "caption": "At-least-once, message-id key",
+      "role": "intake",
+      "icon_description": "three stacked horizontal bars like a layered queue, with a small check mark",
+      "position": "main row, right of Intake"
+    },
+    {
+      "id": "parser",
+      "step": 3,
+      "name": "Parser & Extractor",
+      "caption": "Regex fields, schema validated",
+      "role": "processing",
+      "icon_description": "angle brackets < > with a magnifying glass overlapping them",
+      "position": "main row, right of Queue & Dedupe"
+    },
+    {
+      "id": "rule_engine",
+      "step": 4,
+      "name": "Rule Engine",
+      "caption": "Keyword match, first rule wins",
+      "role": "decision_logic",
+      "icon_description": "a branching flowchart glyph: one node splitting into two nodes",
+      "position": "main row centre, top card inside the dashed purple group"
+    },
+    {
+      "id": "priority_matrix",
+      "step": 5,
+      "name": "Priority Matrix",
+      "caption": "Impact x urgency lookup",
+      "role": "decision_logic",
+      "icon_description": "a 3x3 grid of squares with one square highlighted",
+      "position": "inside the dashed purple group, directly below Rule Engine"
+    },
+    {
+      "id": "routing_table",
+      "step": 6,
+      "name": "Routing Table",
+      "caption": "Category to assignment group",
+      "role": "decision_logic",
+      "icon_description": "a signpost with two arrows pointing in different directions",
+      "position": "inside the dashed purple group, directly below Priority Matrix"
+    },
+    {
+      "id": "cmdb",
+      "step": 7,
+      "name": "CMDB Lookup",
+      "caption": "SQL: user, department, asset",
+      "role": "datastore",
+      "icon_description": "a classic cylindrical database drum with three bands",
+      "position": "below the main row, beneath the dashed purple group, connected upward"
+    },
+    {
+      "id": "responder",
+      "step": 8,
+      "name": "Template Responder",
+      "caption": "Canned reply per category",
+      "role": "action",
+      "icon_description": "a document page with three text lines and a small speech bubble",
+      "position": "main row, right of the dashed purple group"
+    },
+    {
+      "id": "itsm",
+      "step": 9,
+      "name": "ITSM Ticket Created",
+      "caption": "Routed with SLA clock set",
+      "role": "action",
+      "icon_description": "a ticket stub shape with a check mark inside a circle",
+      "position": "far right, main row — the success outcome"
+    },
+    {
+      "id": "human_queue",
+      "step": 10,
+      "name": "Human Triage Queue",
+      "caption": "No rule matched",
+      "role": "human_fallback",
+      "icon_description": "a head-and-shoulders person silhouette wearing a headset, with a small warning triangle",
+      "position": "bottom right, below the ITSM card — the failure outcome"
+    }
+  ],
+
+  "connections": [
+    { "from": "intake", "to": "queue", "label": "raw message" },
+    { "from": "queue", "to": "parser", "label": "unique message" },
+    { "from": "parser", "to": "rule_engine", "label": "validated ticket" },
+    { "from": "rule_engine", "to": "priority_matrix", "label": "category" },
+    { "from": "priority_matrix", "to": "routing_table", "label": "P1 to P4" },
+    { "from": "cmdb", "to": "routing_table", "label": "department, service", "style": "thin grey" },
+    { "from": "routing_table", "to": "responder", "label": "assignment group" },
+    { "from": "responder", "to": "itsm", "label": "create ticket" },
+    { "from": "rule_engine", "to": "human_queue", "label": "no match — 45% of volume", "style": "red dashed arrow curving down and right" },
+    { "from": "parser", "to": "human_queue", "label": "invalid input", "style": "red dashed arrow" }
+  ],
+
+  "callouts": [
+    {
+      "text": "Fully deterministic — no model, no tokens, replayable",
+      "placement": "top-centre banner above the main row",
+      "style": "light green pill-shaped banner with dark green text and a small lock icon"
+    },
+    {
+      "text": "Every new phrasing of a problem requires a config change and a deploy",
+      "placement": "bottom-right, next to the Human Triage Queue card",
+      "style": "light red note box with dark red text and a small warning icon"
+    }
+  ],
+
+  "legend": {
+    "placement": "bottom-left corner, single horizontal row of small colour swatches with labels",
+    "entries": [
+      { "color": "#2D6CDF", "label": "Intake" },
+      { "color": "#0F9D58", "label": "Processing" },
+      { "color": "#7A3FBF", "label": "Rule logic" },
+      { "color": "#E08A1E", "label": "Datastore" },
+      { "color": "#137C8B", "label": "Action" },
+      { "color": "#D93838", "label": "Human fallback" }
+    ]
+  }
+}

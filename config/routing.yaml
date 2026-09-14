@@ -1,0 +1,23 @@
+# Category -> assignment group. Every category in taxonomy.yaml must have a route (checked at start-up).
+# Overrides are checked first, top to bottom; the first whose conditions ALL hold wins.
+version: 1.0.0
+
+routes:
+  access_identity: service_desk_l1
+  clinical_applications: clinical_apps_support
+  clinical_devices: clinical_engineering
+  end_user_hardware: desktop_support
+  printing: desktop_support
+  network_connectivity: network_operations
+  email_collaboration: collaboration_platforms
+  software_request: software_licensing
+  security_incident: security_operations
+
+overrides:
+  - when: { rule_id: R011 }
+    group: identity_access
+    reason: MFA problems go to identity and access management, not first line
+
+  - when: { category: end_user_hardware, asset_service: clinical_device_fleet }
+    group: clinical_engineering
+    reason: hardware in the clinical device fleet is supported by clinical engineering

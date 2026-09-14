@@ -1,0 +1,13 @@
+Message-ID: <sample-002@contoso.example>
+Date: Mon, 14 Sep 2026 07:20:00 -0600
+From: Priya Raman <priya.raman@contoso.example>
+To: servicedesk@contoso.example
+Subject: URGENT scanning down in ICU
+Content-Type: text/plain; charset=utf-8
+
+Every barcode scanner on the whole unit stopped reading patient wristbands at 7am,
+including CH-SCN-00003. We are doing manual checks for meds.
+
+Priya Raman, Charge Nurse E100201
+
+Sent from my iPhone

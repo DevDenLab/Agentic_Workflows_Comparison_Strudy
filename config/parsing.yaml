@@ -1,0 +1,24 @@
+# Text cleaning (parser) and identifier extraction (extractor). Used by v1; reused verbatim by v2.
+# Patterns are Python `re` syntax, matched case-insensitively, one line at a time for markers.
+version: 1.0.0
+
+parser:
+  # Once some ticket content has been seen, a line matching one of these starts quoted reply
+  # history; that line and everything after it is dropped. Before any content (a forward), they are kept.
+  quote_markers:
+    - '^On .+ wrote:\s*$'
+    - '^-+\s*Original Message\s*-+\s*$'
+    - '^_{10,}\s*$'
+    - '^From:\s.+$'
+    - '^>'
+  # Same rule for signatures and legal footers.
+  signature_markers:
+    - '^--\s*$'
+    - '^(?:thanks|thank you|many thanks|regards|kind regards|best regards|best|cheers|sincerely)[\s,.!]*$'
+    - '^sent from my \w+'
+    - '^(?:confidentiality notice|this e-?mail(?: message)?(?: and any attachments)? (?:is|may be) confidential)'
+
+extractor:
+  employee_id: '\bE\d{6}\b'
+  asset_tag: '\bCH-(?:LT|DT|WOW|SCN|PRN|MON)-\d{5}\b'
+  error_code: '\b(?:0x[0-9A-F]{8}|ERR-\d{3,5}|AADSTS\d{5,6})\b'

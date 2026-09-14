@@ -1,0 +1,10 @@
+Hello {{ first_name }},
+
+We have logged "{{ subject }}" as a {{ priority }} request for the {{ assignment_group | humanise }} team.
+Our target is to resolve it by {{ due_local }}.
+
+{% block advice %}{% endblock %}
+
+If anything changes, reply to this email and your update will be added to the ticket.
+
+Contoso Health IT Service Desk

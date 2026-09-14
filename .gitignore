@@ -1,0 +1,20 @@
+# secrets
+.env
+
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+build/
+dist/
+
+# tool caches
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# runtime state (SQLite, DLQ, vector indexes) — normally lives in VAR_DIR outside the repo
+var/

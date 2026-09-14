@@ -1,0 +1,5 @@
+# Behaviour settings. Loaded and validated at start-up (`triage config-check`).
+# Each stage adds the section it needs; nothing here is speculative.
+schema_version: 1
+organisation: Contoso Health (fictional)
+timezone: America/Edmonton # business hours and SLA clocks are computed in this zone

@@ -1,0 +1,9 @@
+Message-ID: <sample-005@contoso.example>
+Date: Mon, 14 Sep 2026 13:45:00 -0600
+From: Liam Chen <liam.chen@contoso.example>
+To: servicedesk@contoso.example
+Subject: Room 12
+Content-Type: text/plain; charset=utf-8
+
+The screen in room 12 goes black and beeps three times after a few minutes.
+Nurses have to walk to the next room to document.

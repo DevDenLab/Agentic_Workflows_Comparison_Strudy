@@ -1,0 +1,21 @@
+# Operational settings for storage, queueing and the ITSM write. Behaviour, not secrets.
+version: 1.0.0
+
+storage:
+  # Applied to EVERY SQLite connection, not only the first one opened.
+  busy_timeout_seconds: 5
+
+queue:
+  # A consumer that crashes mid-ticket loses its lease after this long and the message is redelivered.
+  lease_seconds: 300
+
+itsm:
+  retry:
+    max_attempts: 4
+    initial_backoff_seconds: 0.5
+    max_backoff_seconds: 8
+    jitter_seconds: 0.25
+  fault_injection:
+    # Stand-in ITSM only. Raise failure_rate to watch retries and the dead-letter queue work.
+    failure_rate: 0.0
+    seed: 7

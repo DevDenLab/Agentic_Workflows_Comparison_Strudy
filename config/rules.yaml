@@ -1,0 +1,94 @@
+# v1's entire decision logic. Rules are checked top to bottom and the FIRST match wins,
+# so specific rules must sit above general ones. Reordering this file changes behaviour.
+#
+# A rule matches when the subject or text contains at least one `any_of` phrase and no `none_of` phrase.
+# Phrases are case-insensitive and match whole words. `urgency` feeds the priority matrix.
+#
+# Changing this file: bump `version`, open a PR, re-run the benchmark.
+version: 1.0.0
+
+rules:
+  - id: R001
+    description: Phishing, malware or suspected compromise
+    category: security_incident
+    urgency: high
+    any_of: [phishing, suspicious email, suspicious link, hacked, compromised, ransomware, malware, virus]
+
+  - id: R002
+    description: Lost or stolen device
+    category: security_incident
+    urgency: high
+    any_of: [stolen, lost my laptop, lost my phone, lost device, left my laptop]
+
+  - id: R010
+    description: Password and lockout (EMR accounts are handled by R020)
+    category: access_identity
+    urgency: medium
+    any_of: [locked out, account locked, account is locked, password expired, reset my password, forgot my password, password reset]
+    none_of: [emr]
+
+  - id: R011
+    description: Multi-factor authentication
+    category: access_identity
+    urgency: medium
+    any_of: [mfa, multi-factor, authenticator, verification code, AADSTS50076]
+
+  - id: R020
+    description: Electronic medical record
+    category: clinical_applications
+    urgency: high
+    any_of: [emr, medical record, charting, order entry, medication administration record]
+
+  - id: R021
+    description: Lab, imaging and pharmacy applications
+    category: clinical_applications
+    urgency: high
+    any_of: [lab system, lab results, lis, pacs, imaging viewer, pharmacy system, dispensing system]
+
+  - id: R030
+    description: Scan to email is office printing, not a clinical scanner
+    category: printing
+    urgency: low
+    any_of: [scan to email]
+
+  - id: R031
+    description: Clinical devices on care units
+    category: clinical_devices
+    urgency: high
+    any_of: [workstation on wheels, wow cart, medication cart, med cart, barcode scanner, scanner, wristband printer, wristband, label printer]
+
+  - id: R040
+    description: VPN and remote access
+    category: network_connectivity
+    urgency: medium
+    any_of: [vpn, remote access, citrix]
+
+  - id: R041
+    description: Wi-Fi and wired network
+    category: network_connectivity
+    urgency: medium
+    any_of: [wifi, wi-fi, wireless, no internet, network down, network cable, ethernet]
+
+  - id: R050
+    description: Email, calendar and Teams
+    category: email_collaboration
+    urgency: low
+    any_of: [outlook, email, e-mail, shared mailbox, calendar, teams, meeting invite]
+
+  - id: R060
+    description: Office printing
+    category: printing
+    urgency: low
+    any_of: [printer, print queue, printing, toner, paper jam]
+
+  - id: R070
+    description: End-user hardware
+    category: end_user_hardware
+    urgency: medium
+    any_of: [laptop, desktop, monitor, keyboard, mouse, docking station, headset, blue screen, won't turn on]
+
+  - id: R080
+    description: Software requests
+    category: software_request
+    urgency: low
+    any_of: [install, installation, licence, license, software request, upgrade]

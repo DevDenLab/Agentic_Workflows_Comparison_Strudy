@@ -1,0 +1,25 @@
+# ITIL-style priority. Impact = how much of the organisation is affected. Urgency = how fast it hurts.
+# Urgency comes from the matched rule (rules.yaml). Impact is the HIGHEST level any signal below gives.
+version: 1.0.0
+
+matrix: # matrix[impact][urgency]
+  high:   { high: P1, medium: P2, low: P3 }
+  medium: { high: P2, medium: P3, low: P4 }
+  low:    { high: P3, medium: P4, low: P4 }
+
+impact:
+  base: low                     # one person, nothing else known
+  clinical_department: medium   # requester works in a clinical department (CMDB)
+  high_criticality_asset: medium # the asset named in the ticket supports a high-criticality service (CMDB)
+  widespread: high              # the ticket says many people are affected
+  widespread_phrases:
+    - everyone
+    - whole unit
+    - entire unit
+    - whole floor
+    - entire floor
+    - whole department
+    - all users
+    - all staff
+    - multiple users
+    - nobody can

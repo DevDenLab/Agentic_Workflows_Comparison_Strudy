@@ -1,0 +1,193 @@
+{
+  "spec_version": "art-direction/1.0",
+  "diagram_id": "v2_agentic_workflow",
+  "title": "Agentic Workflow — IT Service-Desk Ticket Triage",
+  "subtitle": "Deterministic shell around one reasoning loop. Open-weight model via OpenRouter.",
+  "aspect_ratio": "16:9",
+
+  "art_direction": {
+    "reference_style": "AWS / Azure reference-architecture diagram",
+    "rendering_note": "Clean flat vector, white background, no 3D, no isometric, no photorealism, no gradients on boxes. Must look like the sibling of the conventional-automation diagram — identical card, icon and arrow language.",
+    "background": "pure white with a very faint light-grey dot grid",
+    "box_style": "white rounded-rectangle card, 2px coloured border, soft shadow, coloured square icon tile in the top-left corner of the card",
+    "icon_tile": "48x48 rounded square filled with the component's accent colour, containing a simple white line-art glyph",
+    "step_badge": "small filled circle with a white number, sitting on the top-left edge of each card, in the card's accent colour",
+    "arrows": "thin dark-grey orthogonal arrows with solid triangular heads and short italic labels in grey",
+    "typography": "Inter / Helvetica. Titles bold dark navy. Card names bold 18px dark navy. One short grey caption line per card, max 6 words.",
+    "layout_rule": "One clear left-to-right flow. The agent loop sits in the centre as a visually obvious circular cycle. Tools sit in a row directly beneath the agent. Outcomes on the far right, stacked. Generous whitespace."
+  },
+
+  "color_key": {
+    "deterministic": "#5A6779",
+    "guardrail": "#D93A7A",
+    "reasoning": "#7A3FBF",
+    "tool": "#0F9D58",
+    "verification": "#137C8B",
+    "human_feedback": "#E08A1E"
+  },
+
+  "groups": [
+    {
+      "id": "grp_loop",
+      "label": "Non-deterministic zone — the only part that reasons",
+      "contains": ["agent", "tool_kb", "tool_cmdb", "tool_rules"],
+      "style": "dashed purple rounded boundary drawn around the agent card and the three tool cards, label in small purple text at the top-left of the boundary"
+    },
+    {
+      "id": "grp_shell",
+      "label": "Deterministic shell — ordinary testable software",
+      "contains": ["intake", "guardrail", "schema_gate", "critic", "confidence_gate"],
+      "style": "no boundary; indicated only by the grey and teal card colours"
+    }
+  ],
+
+  "components": [
+    {
+      "id": "intake",
+      "step": 1,
+      "name": "Intake & Parser",
+      "caption": "Identical code to version one",
+      "role": "deterministic",
+      "icon_description": "a simple open envelope outline with angle brackets < > beside it",
+      "position": "far left, main row"
+    },
+    {
+      "id": "guardrail",
+      "step": 2,
+      "name": "Input Guardrail",
+      "caption": "PII redaction, injection filter",
+      "role": "guardrail",
+      "icon_description": "a shield outline with a small eye crossed out inside it",
+      "position": "main row, right of Intake"
+    },
+    {
+      "id": "agent",
+      "step": 3,
+      "name": "Orchestrator Agent",
+      "caption": "Plan, act, observe, repeat",
+      "role": "reasoning",
+      "icon_description": "a brain outline made of circuit-board traces with small connector nodes",
+      "position": "centre of the frame, the visual focal point, largest card",
+      "emphasis": "draw a bold circular arrow loop wrapping around this card to show iteration, labelled 'loop until confident or budget spent'"
+    },
+    {
+      "id": "tool_kb",
+      "step": 4,
+      "name": "Tool: kb_search",
+      "caption": "Local RAG over runbooks",
+      "role": "tool",
+      "icon_description": "an open book with a magnifying glass over it",
+      "position": "tool row, directly below the agent, left card"
+    },
+    {
+      "id": "tool_cmdb",
+      "step": 5,
+      "name": "Tool: cmdb_lookup",
+      "caption": "Same SQL function as version one",
+      "role": "tool",
+      "icon_description": "a cylindrical database drum with a small plug connector",
+      "position": "tool row, directly below the agent, middle card"
+    },
+    {
+      "id": "tool_rules",
+      "step": 6,
+      "name": "Tool: apply_rules",
+      "caption": "Version one's rule engine, callable",
+      "role": "tool",
+      "icon_description": "a branching flowchart glyph: one node splitting into two nodes",
+      "position": "tool row, directly below the agent, right card",
+      "emphasis": "add a small green ribbon badge on this card reading 'V1 reused'"
+    },
+    {
+      "id": "schema_gate",
+      "step": 7,
+      "name": "Structured Output",
+      "caption": "Typed decision plus citations",
+      "role": "verification",
+      "icon_description": "a pair of curly braces { } with a check mark between them",
+      "position": "main row, right of the dashed purple group"
+    },
+    {
+      "id": "critic",
+      "step": 8,
+      "name": "Critic Pass",
+      "caption": "Is every claim actually cited",
+      "role": "verification",
+      "icon_description": "a magnifying glass containing a check mark",
+      "position": "main row, right of Structured Output"
+    },
+    {
+      "id": "confidence_gate",
+      "step": 9,
+      "name": "Confidence Gate",
+      "caption": "Auto-resolve or escalate",
+      "role": "verification",
+      "icon_description": "a two-way gate or fork symbol, one path up and one path down",
+      "position": "main row, right of Critic Pass"
+    },
+    {
+      "id": "auto",
+      "step": 10,
+      "name": "Auto-Resolved",
+      "caption": "Routed with cited reasoning",
+      "role": "tool",
+      "icon_description": "a ticket stub shape with a check mark inside a circle",
+      "position": "far right, upper — the high-confidence outcome"
+    },
+    {
+      "id": "human",
+      "step": 11,
+      "name": "Human Review",
+      "caption": "Arrives with draft and evidence",
+      "role": "human_feedback",
+      "icon_description": "a head-and-shoulders person silhouette wearing a headset, next to a small document",
+      "position": "far right, lower — the low-confidence outcome"
+    }
+  ],
+
+  "connections": [
+    { "from": "intake", "to": "guardrail", "label": "clean text" },
+    { "from": "guardrail", "to": "agent", "label": "sanitised ticket as data" },
+    { "from": "agent", "to": "tool_kb", "label": "tool call", "style": "thin purple, double-headed" },
+    { "from": "agent", "to": "tool_cmdb", "label": "tool call", "style": "thin purple, double-headed" },
+    { "from": "agent", "to": "tool_rules", "label": "tool call", "style": "thin purple, double-headed" },
+    { "from": "agent", "to": "schema_gate", "label": "candidate decision" },
+    { "from": "schema_gate", "to": "agent", "label": "invalid schema — repair", "style": "red dashed arrow curving back left" },
+    { "from": "schema_gate", "to": "critic", "label": "typed decision" },
+    { "from": "critic", "to": "agent", "label": "ungrounded — re-reason", "style": "red dashed arrow curving back left" },
+    { "from": "critic", "to": "confidence_gate", "label": "approved" },
+    { "from": "confidence_gate", "to": "auto", "label": "confidence high" },
+    { "from": "confidence_gate", "to": "human", "label": "confidence low or high blast radius", "style": "amber arrow" },
+    { "from": "human", "to": "tool_kb", "label": "correction becomes an eval case", "style": "amber dashed arrow running along the bottom of the frame back to the left" }
+  ],
+
+  "callouts": [
+    {
+      "text": "Only the dashed box reasons. Everything outside it is ordinary software you can unit-test.",
+      "placement": "top-centre banner above the main row",
+      "style": "light purple pill-shaped banner with dark purple text and a small brain icon"
+    },
+    {
+      "text": "Handles phrasings nobody wrote a rule for. Costs tokens, latency and non-determinism.",
+      "placement": "bottom-left note",
+      "style": "light teal note box with dark teal text and a small scales icon"
+    },
+    {
+      "text": "The human is not removed — they receive a draft with evidence instead of a raw ticket.",
+      "placement": "bottom-right, next to the Human Review card",
+      "style": "light amber note box with dark amber text and a small person icon"
+    }
+  ],
+
+  "legend": {
+    "placement": "bottom-left corner, single horizontal row of small colour swatches with labels",
+    "entries": [
+      { "color": "#5A6779", "label": "Deterministic code" },
+      { "color": "#D93A7A", "label": "Guardrail" },
+      { "color": "#7A3FBF", "label": "LLM reasoning" },
+      { "color": "#0F9D58", "label": "Tool (typed function)" },
+      { "color": "#137C8B", "label": "Verification" },
+      { "color": "#E08A1E", "label": "Human / feedback" }
+    ]
+  }
+}
