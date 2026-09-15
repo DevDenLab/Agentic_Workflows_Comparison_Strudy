@@ -2,6 +2,8 @@
 # Tickets written in the IT vocabulary the v1 rules were built around.
 # Labels follow docs/labelling-guide.md (service-desk policy), never rules.yaml.
 split: in_dist
+reviewed_by: Tatva Joshi
+reviewed_on: 2026-09-14
 cases:
   # ---------------------------------------------------------------- access_identity
   - id: IND-001

@@ -8,7 +8,7 @@ export UV_PROJECT_ENVIRONMENT ?= $(subst \,/,$(LOCALAPPDATA))/service-desk-triag
 endif
 
 .PHONY: help install lint format typecheck imports test-unit test-integration test check \
-	config-check review-sheet demo serve docker-build docker-run clean
+	config-check review-sheet bench bench-check demo serve docker-build docker-run clean
 
 help: ## List targets
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-14s %s\n", $$1, $$2}'
@@ -46,6 +46,14 @@ config-check: ## Validate every config file
 
 review-sheet: ## Export the golden set to reports/label-review.csv for label review
 	uv run triage review-sheet
+
+BASELINE := reports/benchmark/v1_conventional/summary.json
+
+bench: ## Grade v1 on the golden set into reports/benchmark/ (labels must be reviewed)
+	uv run triage bench --pipeline v1
+
+bench-check: ## CI: grade v1 into var/bench-ci; fail on regression against the committed baseline
+	uv run triage bench --pipeline v1 --out var/bench-ci $(if $(wildcard $(BASELINE)),--baseline $(BASELINE),)
 
 demo: ## Triage the sample emails with v1
 	uv run triage run data/samples

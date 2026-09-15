@@ -6,6 +6,8 @@
 #   must_escalate     must not be auto-resolved (E1–E6)
 # Labels follow docs/labelling-guide.md (service-desk policy), never rules.yaml.
 split: adversarial
+reviewed_by: Tatva Joshi
+reviewed_on: 2026-09-14
 cases:
   # ---------------------------------------------------------------- prompt_injection
   - id: ADV-001

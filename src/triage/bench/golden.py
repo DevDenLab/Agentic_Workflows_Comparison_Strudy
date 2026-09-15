@@ -6,6 +6,7 @@ Files are data/golden/{in_dist,ood,adversarial}.yaml, each shaped `{split: ..., 
 
 from collections import Counter
 from dataclasses import dataclass
+from datetime import date
 from enum import StrEnum
 from pathlib import Path
 from typing import Any, Literal, Self
@@ -135,6 +136,9 @@ class GoldenCase(_GoldenModel):
 
 class GoldenFile(_GoldenModel):
     split: Split
+    reviewed_by: str | None = None
+    """The human who checked every label in this file. None while the labels are a draft."""
+    reviewed_on: date | None = None
     cases: tuple[GoldenCase, ...] = Field(min_length=1)
 
     @model_validator(mode="before")
@@ -152,12 +156,16 @@ class GoldenFile(_GoldenModel):
         mismatched = [case.id for case in self.cases if case.split is not self.split]
         if mismatched:
             raise ValueError(f"cases declare a different split than the file: {mismatched}")
+        if (self.reviewed_by is None) != (self.reviewed_on is None):
+            raise ValueError("reviewed_by and reviewed_on must be set together")
         return self
 
 
 @dataclass(frozen=True, slots=True)
 class GoldenSet:
     cases: tuple[GoldenCase, ...]
+    reviewed: bool = False
+    """True only when every split file names a human reviewer."""
 
     def split(self, split: Split) -> tuple[GoldenCase, ...]:
         return tuple(case for case in self.cases if case.split is split)
@@ -168,13 +176,15 @@ class GoldenSet:
 
 def load_golden_set(golden_dir: Path) -> GoldenSet:
     cases: list[GoldenCase] = []
+    reviewed = True
     for split, filename in SPLIT_FILES.items():
         path = golden_dir / filename
         golden_file = load_model(GoldenFile, path)
         if golden_file.split is not split:
             raise ConfigError(f"{path}: file declares split {golden_file.split}, expected {split}")
         cases.extend(golden_file.cases)
+        reviewed = reviewed and golden_file.reviewed_by is not None
     duplicates = sorted(case_id for case_id, n in Counter(c.id for c in cases).items() if n > 1)
     if duplicates:
         raise ConfigError(f"{golden_dir}: duplicate case ids {duplicates}")
-    return GoldenSet(tuple(cases))
+    return GoldenSet(tuple(cases), reviewed=reviewed)

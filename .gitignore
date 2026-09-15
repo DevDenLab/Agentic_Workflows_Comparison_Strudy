@@ -18,3 +18,4 @@ htmlcov/
 
 # runtime state (SQLite, DLQ, vector indexes) — normally lives in VAR_DIR outside the repo
 var/
+reports/benchmark/*/results.jsonl

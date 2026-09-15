@@ -1,0 +1,13 @@
+# Benchmark settings. Changing any of these changes the reported numbers: bump `version`.
+version: 1.0.0
+
+# Every golden ticket "arrives" at this moment: Monday 10:00 local, inside business hours,
+# so SLA arithmetic is identical for all cases and all runs.
+received_at: "2026-09-14T10:00:00-06:00"
+service_desk_address: servicedesk@contoso.example
+
+default_repeats: 3
+
+# CI fails when, on any split, decision accuracy or escalation recall drops, or the false-confident
+# rate rises, by more than this (absolute, 0-1). v1 is deterministic, so any movement is real.
+regression_tolerance: 0.0

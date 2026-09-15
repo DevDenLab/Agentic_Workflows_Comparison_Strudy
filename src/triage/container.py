@@ -3,6 +3,7 @@
 Components receive their dependencies as constructor arguments; none of them reach for globals.
 """
 
+import shutil
 import time
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -10,6 +11,7 @@ from pathlib import Path
 
 from triage.clock import Clock, SystemClock
 from triage.config import LoadedConfig, Settings, load_config
+from triage.contracts import TriagePipeline
 from triage.observability.logging import configure_logging
 from triage.observability.metrics import TriageMetrics
 from triage.v1.cmdb import SqliteCmdb, create_cmdb
@@ -112,3 +114,16 @@ def build_v1(container: Container, *, sleep: Callable[[float], None] = time.slee
         human_queue=human_queue,
         dead_letters=dead_letters,
     )
+
+
+def v1_benchmark_factory(settings: Settings) -> Callable[[int], TriagePipeline]:
+    """Pipelines for `triage bench`. Each run gets its own empty state directory, so the
+    idempotency store never dedupes a repeated ticket and every run starts with an empty ITSM."""
+
+    def factory(run: int) -> TriagePipeline:
+        run_dir = settings.var_dir / "bench" / "v1" / f"run-{run}"
+        shutil.rmtree(run_dir, ignore_errors=True)
+        run_settings = settings.model_copy(update={"var_dir": run_dir, "log_level": "WARNING"})
+        return build_v1(build_container(run_settings)).pipeline
+
+    return factory

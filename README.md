@@ -19,7 +19,7 @@ The goal is not to show that agents are better. It is to measure where the extra
 |---|---|---|
 | 0 | Scaffold: contracts, taxonomy, config, logging, CI, module boundaries | done |
 | 1 | v1 conventional pipeline + tests | done |
-| 2 | Golden ticket set + benchmark harness (v1) | in progress: 150 labelled tickets drafted, labels in human review |
+| 2 | Golden ticket set + benchmark harness (v1) | in progress: 150 tickets drafted and in human review; grader built, v1 not yet run on the golden set |
 | 3 | LLM client (record/replay) + v1.5 | |
 | 4 | v2 agentic workflow | |
 | 5 | Full benchmark report, ADRs, final diagrams | |
@@ -38,6 +38,19 @@ make docker-build && make docker-run
 ```
 
 Queue mode: `uv run triage enqueue data/samples` then `uv run triage worker`.
+
+### Benchmark
+
+```bash
+make review-sheet   # golden set -> reports/label-review.csv for human label review
+make bench          # grade v1 -> reports/benchmark/v1_conventional/ (summary.md, charts, per-run results)
+make bench-check    # what CI runs: fail if accuracy or escalation recall drops, or false-confident rises
+```
+
+`triage bench` refuses to run until every `data/golden/*.yaml` names a reviewer (`reviewed_by`,
+`reviewed_on`); `--allow-draft` overrides that for local experiments. Scoring rules are fixed in
+[docs/labelling-guide.md](docs/labelling-guide.md) §9. Intervals are 95% Wilson intervals whose
+sample size is the number of tickets, so repeated runs never make them look tighter than they are.
 
 v1 needs no model or API key. For v1.5 and v2, copy `.env.example` to `.env` and choose a provider.
 Any OpenAI-compatible `/chat/completions` endpoint works: DeepSeek, OpenRouter, Ollama, vLLM.

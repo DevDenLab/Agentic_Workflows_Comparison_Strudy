@@ -1,0 +1,33 @@
+name: benchmark
+
+# Re-grades v1 on the golden set whenever rules, labels or code change, and fails on regression
+# against the committed baseline (reports/benchmark/v1_conventional/summary.json).
+# v1 is deterministic and needs no model or key, so this runs on every change for free.
+
+on:
+  pull_request:
+    paths: ["config/**", "data/**", "src/triage/**", "uv.lock"]
+  push:
+    branches: [main]
+    paths: ["config/**", "data/**", "src/triage/**", "uv.lock"]
+
+permissions:
+  contents: read
+
+jobs:
+  v1:
+    name: grade v1 on the golden set
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: make install
+      - run: make bench-check
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: benchmark-v1
+          path: var/bench-ci/
+          if-no-files-found: ignore

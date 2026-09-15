@@ -1,5 +1,6 @@
 import json
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
+from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
 
@@ -7,10 +8,26 @@ import typer
 
 from triage import __version__
 from triage.bench.golden import load_golden_set
+from triage.bench.report import (
+    SUMMARY_MD,
+    format_rate,
+    load_summary,
+    regressions,
+    write_results,
+    write_summary,
+)
 from triage.bench.review import write_review_sheet
-from triage.config import ConfigError
-from triage.container import Container, build_container, build_v1, init_cmdb
-from triage.contracts import InboundMessage, TriageResult
+from triage.bench.runner import golden_fingerprint, load_bench_config, run_benchmark
+from triage.bench.scoring import score_case, summarise
+from triage.config import ConfigError, Settings
+from triage.container import (
+    Container,
+    build_container,
+    build_v1,
+    init_cmdb,
+    v1_benchmark_factory,
+)
+from triage.contracts import InboundMessage, TriagePipeline, TriageResult
 from triage.v1.intake import EmailFileIntake
 
 app = typer.Typer(no_args_is_help=True, add_completion=False, help="Service-desk ticket triage.")
@@ -108,6 +125,85 @@ def review_sheet(
         typer.echo(f"golden set invalid: {exc}", err=True)
         raise typer.Exit(code=1) from exc
     typer.echo(f"wrote {write_review_sheet(golden, output)} cases to {output}")
+
+
+class BenchPipeline(StrEnum):
+    V1 = "v1"
+
+
+_BENCH_FACTORIES: dict[BenchPipeline, Callable[[Settings], Callable[[int], TriagePipeline]]] = {
+    BenchPipeline.V1: v1_benchmark_factory,
+}
+
+
+@app.command()
+def bench(
+    pipeline: Annotated[BenchPipeline, typer.Option(help="Pipeline to benchmark.")] = (
+        BenchPipeline.V1
+    ),
+    repeats: Annotated[
+        int | None, typer.Option(min=1, help="Runs per ticket. Default: config/bench.yaml.")
+    ] = None,
+    out: Annotated[Path, typer.Option(help="Reports go to OUT/<pipeline name>/.")] = Path(
+        "reports/benchmark"
+    ),
+    baseline: Annotated[
+        Path | None,
+        typer.Option(exists=True, dir_okay=False, help="summary.json to compare with."),
+    ] = None,
+    allow_draft: Annotated[
+        bool, typer.Option("--allow-draft", help="Run on labels nobody has reviewed yet.")
+    ] = False,
+) -> None:
+    """Grade a pipeline on the golden set: results, summary and charts. Exit 1 on regression."""
+    from triage.bench.charts import plot_outcomes, plot_rates  # matplotlib is a dev dependency
+
+    container = _container()
+    settings = container.settings
+    try:
+        golden = load_golden_set(settings.data_dir / "golden")
+        bench_config = load_bench_config(settings.config_dir)
+    except ConfigError as exc:
+        typer.echo(f"benchmark input invalid: {exc}", err=True)
+        raise typer.Exit(code=1) from exc
+    if not golden.reviewed and not allow_draft:
+        typer.echo(
+            "golden labels have not been reviewed: set reviewed_by and reviewed_on in every "
+            "data/golden/*.yaml, or pass --allow-draft.",
+            err=True,
+        )
+        raise typer.Exit(code=2)
+
+    runs = repeats or bench_config.default_repeats
+    factory = _BENCH_FACTORIES[pipeline](settings)
+    case_runs = run_benchmark(golden, factory, repeats=runs, config=bench_config)
+    scored = [(case_run, score_case(case_run)) for case_run in case_runs]
+    summary = summarise(
+        case_runs[0].result.pipeline,
+        runs,
+        golden_fingerprint(golden),
+        [score for _, score in scored],
+    )
+
+    target = out / summary.pipeline
+    write_results(scored, target)
+    write_summary(summary, target)
+    plot_outcomes([summary], target / "outcomes.png")
+    plot_rates([summary], target / "rates.png")
+    for name, group in {**summary.splits, "all": summary.overall}.items():
+        typer.echo(
+            f"{name:<12} decision accuracy {format_rate(group.decision_accuracy):<16} "
+            f"false-confident {format_rate(group.false_confident_rate)}"
+        )
+    typer.echo(f"report: {target / SUMMARY_MD}")
+
+    if baseline is not None:
+        problems = regressions(summary, load_summary(baseline), bench_config.regression_tolerance)
+        for problem in problems:
+            typer.echo(f"REGRESSION {problem}", err=True)
+        if problems:
+            raise typer.Exit(code=1)
+        typer.echo(f"no regression against {baseline}")
 
 
 @app.command()

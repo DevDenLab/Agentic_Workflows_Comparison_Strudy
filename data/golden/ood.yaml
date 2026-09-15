@@ -3,6 +3,8 @@
 # symptoms instead of product names, typos, plurals, another language.
 # Labels follow docs/labelling-guide.md (service-desk policy), never rules.yaml.
 split: ood
+reviewed_by: Tatva Joshi
+reviewed_on: 2026-09-14
 cases:
   # ---------------------------------------------------------------- access_identity
   - id: OOD-001
