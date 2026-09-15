@@ -777,6 +777,7 @@ source = { editable = "." }
 dependencies = [
     { name = "fastapi" },
     { name = "holidays" },
+    { name = "httpx" },
     { name = "jinja2" },
     { name = "platformdirs" },
     { name = "prometheus-client" },
@@ -792,7 +793,6 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "httpx" },
     { name = "hypothesis" },
     { name = "import-linter" },
     { name = "matplotlib" },
@@ -807,6 +807,7 @@ dev = [
 requires-dist = [
     { name = "fastapi", specifier = ">=0.141.1" },
     { name = "holidays", specifier = ">=0.104" },
+    { name = "httpx", specifier = ">=0.28.1" },
     { name = "jinja2", specifier = ">=3.1.6" },
     { name = "platformdirs", specifier = ">=4.2" },
     { name = "prometheus-client", specifier = ">=0.26.0" },
@@ -822,7 +823,6 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "httpx", specifier = ">=0.28.1" },
     { name = "hypothesis", specifier = ">=6.168.0" },
     { name = "import-linter", specifier = ">=2.1" },
     { name = "matplotlib", specifier = ">=3.11.2" },

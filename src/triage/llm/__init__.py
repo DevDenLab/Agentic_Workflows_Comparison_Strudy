@@ -1,1 +1,1 @@
-"""OpenAI-compatible /chat/completions client with record/replay. Built in Stage 3."""
+"""OpenAI-compatible /chat/completions client with record/replay for CI (cassette.py)."""

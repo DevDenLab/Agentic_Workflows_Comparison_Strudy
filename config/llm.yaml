@@ -1,0 +1,15 @@
+# v1.5's single LLM call: the rule-miss classifier (docs/flows.md step 7b).
+# Changing model or provider is an env var (TRIAGE_MODEL / LLM_BASE_URL), not this file.
+version: 1.0.0
+
+temperature: 0.0
+max_output_tokens: 200
+timeout_seconds: 30
+max_repair_attempts: 2
+seed: 7
+
+# DeepSeek-specific: deepseek-flash defaults to "thinking mode", which rejects a forced
+# tool_choice. Harmless/ignored on providers that don't recognise this field.
+extra_body:
+  thinking:
+    type: disabled

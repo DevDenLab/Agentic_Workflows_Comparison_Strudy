@@ -1,5 +1,6 @@
 """The benchmark refuses unreviewed labels, so the review marker itself is tested."""
 
+import re
 import shutil
 from pathlib import Path
 
@@ -7,6 +8,8 @@ import pytest
 from pydantic import ValidationError
 
 from triage.bench.golden import SPLIT_FILES, GoldenFile, load_golden_set
+
+_REVIEW_HEADER = re.compile(r"^reviewed_by:.*\nreviewed_on:.*\n", re.MULTILINE)
 
 CASE = {
     "id": "IND-001",
@@ -37,8 +40,12 @@ def test_reviewer_and_date_must_be_set_together() -> None:
 def test_golden_set_is_reviewed_only_when_every_file_names_a_reviewer(
     data_dir: Path, tmp_path: Path
 ) -> None:
+    """The real golden set is already reviewed, so start from unsigned copies of it."""
     golden_dir = tmp_path / "golden"
     shutil.copytree(data_dir / "golden", golden_dir)
+    for path in golden_dir.glob("*.yaml"):
+        path.write_text(_REVIEW_HEADER.sub("", path.read_text(encoding="utf-8")), encoding="utf-8")
+    assert not load_golden_set(golden_dir).reviewed  # sanity: the strip actually worked
 
     def sign(filename: str) -> None:
         path = golden_dir / filename

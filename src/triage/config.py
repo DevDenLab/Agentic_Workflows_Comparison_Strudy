@@ -64,6 +64,8 @@ class Settings(BaseSettings):
     config_dir: Path = Path("config")
     data_dir: Path = Path("data")
     var_dir: Path = Field(default_factory=lambda: Path(user_state_dir(APP_NAME, appauthor=False)))
+    cassette_dir: Path = Path("data/cassettes")
+    """Recorded LLM responses, committed to the repo so CI can replay without a key."""
 
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
     log_format: Literal["json", "console"] = "json"

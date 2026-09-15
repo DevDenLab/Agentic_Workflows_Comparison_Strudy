@@ -7,6 +7,7 @@ requires-python = ">=3.12,<3.13"
 dependencies = [
     "fastapi>=0.141.1",
     "holidays>=0.104",
+    "httpx>=0.28.1",
     "jinja2>=3.1.6",
     "platformdirs>=4.2",
     "prometheus-client>=0.26.0",
@@ -25,7 +26,6 @@ triage = "triage.cli:app"
 
 [dependency-groups]
 dev = [
-    "httpx>=0.28.1",
     "hypothesis>=6.168.0",
     "import-linter>=2.1",
     "matplotlib>=3.11.2",

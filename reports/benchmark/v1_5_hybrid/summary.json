@@ -1,0 +1,1120 @@
+{
+  "pipeline": "v1_5_hybrid",
+  "repeats": 3,
+  "golden_fingerprint": "cf61e49e5394becd",
+  "overall": {
+    "name": "all",
+    "tickets": 150,
+    "runs": 3,
+    "decision_accuracy": {
+      "successes": 318,
+      "total": 450,
+      "tickets": 150,
+      "value": 0.7066666666666667,
+      "ci_low": 0.6293765082407161,
+      "ci_high": 0.7736357907538123
+    },
+    "category_accuracy": {
+      "successes": 360,
+      "total": 393,
+      "tickets": 131,
+      "value": 0.916030534351145,
+      "ci_low": 0.8558897996241043,
+      "ci_high": 0.9524669250309078
+    },
+    "priority_accuracy": {
+      "successes": 348,
+      "total": 393,
+      "tickets": 131,
+      "value": 0.8854961832061069,
+      "ci_low": 0.8196581083613613,
+      "ci_high": 0.9293696823740171
+    },
+    "routing_accuracy": {
+      "successes": 351,
+      "total": 393,
+      "tickets": 131,
+      "value": 0.8931297709923665,
+      "ci_low": 0.8285947262262152,
+      "ci_high": 0.9352652979890717
+    },
+    "auto_resolution_rate": {
+      "successes": 450,
+      "total": 450,
+      "tickets": 150,
+      "value": 1.0,
+      "ci_low": 0.9750297556319235,
+      "ci_high": 1.0
+    },
+    "escalation_rate": {
+      "successes": 0,
+      "total": 450,
+      "tickets": 150,
+      "value": 0.0,
+      "ci_low": 1.734723475976807e-18,
+      "ci_high": 0.0249702443680766
+    },
+    "accuracy_when_auto_resolved": {
+      "successes": 318,
+      "total": 450,
+      "tickets": 150,
+      "value": 0.7066666666666667,
+      "ci_low": 0.6293765082407161,
+      "ci_high": 0.7736357907538123
+    },
+    "false_confident_rate": {
+      "successes": 132,
+      "total": 450,
+      "tickets": 150,
+      "value": 0.29333333333333333,
+      "ci_low": 0.22636420924618766,
+      "ci_high": 0.37062349175928394
+    },
+    "escalation_recall": {
+      "successes": 0,
+      "total": 57,
+      "tickets": 19,
+      "value": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.16817922405261626
+    },
+    "unexpected_outcomes": 0,
+    "latency_p50_ms": 20.705050003016368,
+    "latency_p95_ms": 1073.1339949925311,
+    "tokens_per_ticket": 329.91333333333336,
+    "stable_tickets": {
+      "successes": 150,
+      "total": 150,
+      "tickets": 150,
+      "value": 1.0,
+      "ci_low": 0.9750297556319235,
+      "ci_high": 1.0
+    }
+  },
+  "splits": {
+    "in_dist": {
+      "name": "in_dist",
+      "tickets": 50,
+      "runs": 3,
+      "decision_accuracy": {
+        "successes": 147,
+        "total": 150,
+        "tickets": 50,
+        "value": 0.98,
+        "ci_low": 0.8950455641036219,
+        "ci_high": 0.9964607407283539
+      },
+      "category_accuracy": {
+        "successes": 147,
+        "total": 150,
+        "tickets": 50,
+        "value": 0.98,
+        "ci_low": 0.8950455641036219,
+        "ci_high": 0.9964607407283539
+      },
+      "priority_accuracy": {
+        "successes": 150,
+        "total": 150,
+        "tickets": 50,
+        "value": 1.0,
+        "ci_low": 0.9286524008666414,
+        "ci_high": 1.0
+      },
+      "routing_accuracy": {
+        "successes": 147,
+        "total": 150,
+        "tickets": 50,
+        "value": 0.98,
+        "ci_low": 0.8950455641036219,
+        "ci_high": 0.9964607407283539
+      },
+      "auto_resolution_rate": {
+        "successes": 150,
+        "total": 150,
+        "tickets": 50,
+        "value": 1.0,
+        "ci_low": 0.9286524008666414,
+        "ci_high": 1.0
+      },
+      "escalation_rate": {
+        "successes": 0,
+        "total": 150,
+        "tickets": 50,
+        "value": 0.0,
+        "ci_low": 6.938893903907228e-18,
+        "ci_high": 0.07134759913335872
+      },
+      "accuracy_when_auto_resolved": {
+        "successes": 147,
+        "total": 150,
+        "tickets": 50,
+        "value": 0.98,
+        "ci_low": 0.8950455641036219,
+        "ci_high": 0.9964607407283539
+      },
+      "false_confident_rate": {
+        "successes": 3,
+        "total": 150,
+        "tickets": 50,
+        "value": 0.02,
+        "ci_low": 0.003539259271646236,
+        "ci_high": 0.10495443589637815
+      },
+      "escalation_recall": {
+        "successes": 0,
+        "total": 0,
+        "tickets": 0,
+        "value": null,
+        "ci_low": null,
+        "ci_high": null
+      },
+      "unexpected_outcomes": 0,
+      "latency_p50_ms": 19.130150001728907,
+      "latency_p95_ms": 23.611170009826303,
+      "tokens_per_ticket": 0.0,
+      "stable_tickets": {
+        "successes": 50,
+        "total": 50,
+        "tickets": 50,
+        "value": 1.0,
+        "ci_low": 0.9286524008666414,
+        "ci_high": 1.0
+      }
+    },
+    "ood": {
+      "name": "ood",
+      "tickets": 50,
+      "runs": 3,
+      "decision_accuracy": {
+        "successes": 93,
+        "total": 150,
+        "tickets": 50,
+        "value": 0.62,
+        "ci_low": 0.4815044693099298,
+        "ci_high": 0.7413721068980641
+      },
+      "category_accuracy": {
+        "successes": 129,
+        "total": 150,
+        "tickets": 50,
+        "value": 0.86,
+        "ci_low": 0.7381380628941446,
+        "ci_high": 0.9304916657298371
+      },
+      "priority_accuracy": {
+        "successes": 114,
+        "total": 150,
+        "tickets": 50,
+        "value": 0.76,
+        "ci_low": 0.6258731624205708,
+        "ci_high": 0.8570260860300828
+      },
+      "routing_accuracy": {
+        "successes": 120,
+        "total": 150,
+        "tickets": 50,
+        "value": 0.8,
+        "ci_low": 0.6696289406777459,
+        "ci_high": 0.887562499842239
+      },
+      "auto_resolution_rate": {
+        "successes": 150,
+        "total": 150,
+        "tickets": 50,
+        "value": 1.0,
+        "ci_low": 0.9286524008666414,
+        "ci_high": 1.0
+      },
+      "escalation_rate": {
+        "successes": 0,
+        "total": 150,
+        "tickets": 50,
+        "value": 0.0,
+        "ci_low": 6.938893903907228e-18,
+        "ci_high": 0.07134759913335872
+      },
+      "accuracy_when_auto_resolved": {
+        "successes": 93,
+        "total": 150,
+        "tickets": 50,
+        "value": 0.62,
+        "ci_low": 0.4815044693099298,
+        "ci_high": 0.7413721068980641
+      },
+      "false_confident_rate": {
+        "successes": 57,
+        "total": 150,
+        "tickets": 50,
+        "value": 0.38,
+        "ci_low": 0.25862789310193596,
+        "ci_high": 0.5184955306900703
+      },
+      "escalation_recall": {
+        "successes": 0,
+        "total": 0,
+        "tickets": 0,
+        "value": null,
+        "ci_low": null,
+        "ci_high": null
+      },
+      "unexpected_outcomes": 0,
+      "latency_p50_ms": 42.309249998652376,
+      "latency_p95_ms": 1211.8613200014806,
+      "tokens_per_ticket": 781.3,
+      "stable_tickets": {
+        "successes": 50,
+        "total": 50,
+        "tickets": 50,
+        "value": 1.0,
+        "ci_low": 0.9286524008666414,
+        "ci_high": 1.0
+      }
+    },
+    "adversarial": {
+      "name": "adversarial",
+      "tickets": 50,
+      "runs": 3,
+      "decision_accuracy": {
+        "successes": 78,
+        "total": 150,
+        "tickets": 50,
+        "value": 0.52,
+        "ci_low": 0.38511744890044614,
+        "ci_high": 0.6520286471342196
+      },
+      "category_accuracy": {
+        "successes": 84,
+        "total": 93,
+        "tickets": 31,
+        "value": 0.9032258064516129,
+        "ci_low": 0.7510006155660716,
+        "ci_high": 0.9665353558368026
+      },
+      "priority_accuracy": {
+        "successes": 84,
+        "total": 93,
+        "tickets": 31,
+        "value": 0.9032258064516129,
+        "ci_low": 0.7510006155660716,
+        "ci_high": 0.9665353558368026
+      },
+      "routing_accuracy": {
+        "successes": 84,
+        "total": 93,
+        "tickets": 31,
+        "value": 0.9032258064516129,
+        "ci_low": 0.7510006155660716,
+        "ci_high": 0.9665353558368026
+      },
+      "auto_resolution_rate": {
+        "successes": 150,
+        "total": 150,
+        "tickets": 50,
+        "value": 1.0,
+        "ci_low": 0.9286524008666414,
+        "ci_high": 1.0
+      },
+      "escalation_rate": {
+        "successes": 0,
+        "total": 150,
+        "tickets": 50,
+        "value": 0.0,
+        "ci_low": 6.938893903907228e-18,
+        "ci_high": 0.07134759913335872
+      },
+      "accuracy_when_auto_resolved": {
+        "successes": 78,
+        "total": 150,
+        "tickets": 50,
+        "value": 0.52,
+        "ci_low": 0.38511744890044614,
+        "ci_high": 0.6520286471342196
+      },
+      "false_confident_rate": {
+        "successes": 72,
+        "total": 150,
+        "tickets": 50,
+        "value": 0.48,
+        "ci_low": 0.34797135286578046,
+        "ci_high": 0.6148825510995539
+      },
+      "escalation_recall": {
+        "successes": 0,
+        "total": 57,
+        "tickets": 19,
+        "value": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.16817922405261626
+      },
+      "unexpected_outcomes": 0,
+      "latency_p50_ms": 20.311650005169213,
+      "latency_p95_ms": 845.2574400042067,
+      "tokens_per_ticket": 208.44,
+      "stable_tickets": {
+        "successes": 50,
+        "total": 50,
+        "tickets": 50,
+        "value": 1.0,
+        "ci_low": 0.9286524008666414,
+        "ci_high": 1.0
+      }
+    }
+  },
+  "adversarial_subtypes": {
+    "prompt_injection": {
+      "name": "prompt_injection",
+      "tickets": 10,
+      "runs": 3,
+      "decision_accuracy": {
+        "successes": 18,
+        "total": 30,
+        "tickets": 10,
+        "value": 0.6,
+        "ci_low": 0.31267376973365824,
+        "ci_high": 0.8318196702937638
+      },
+      "category_accuracy": {
+        "successes": 18,
+        "total": 21,
+        "tickets": 7,
+        "value": 0.8571428571428571,
+        "ci_low": 0.4868721707256811,
+        "ci_high": 0.9743203756552565
+      },
+      "priority_accuracy": {
+        "successes": 21,
+        "total": 21,
+        "tickets": 7,
+        "value": 1.0,
+        "ci_low": 0.6456695649333126,
+        "ci_high": 1.0
+      },
+      "routing_accuracy": {
+        "successes": 18,
+        "total": 21,
+        "tickets": 7,
+        "value": 0.8571428571428571,
+        "ci_low": 0.4868721707256811,
+        "ci_high": 0.9743203756552565
+      },
+      "auto_resolution_rate": {
+        "successes": 30,
+        "total": 30,
+        "tickets": 10,
+        "value": 1.0,
+        "ci_low": 0.7224672001371107,
+        "ci_high": 0.9999999999999999
+      },
+      "escalation_rate": {
+        "successes": 0,
+        "total": 30,
+        "tickets": 10,
+        "value": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.2775327998628892
+      },
+      "accuracy_when_auto_resolved": {
+        "successes": 18,
+        "total": 30,
+        "tickets": 10,
+        "value": 0.6,
+        "ci_low": 0.31267376973365824,
+        "ci_high": 0.8318196702937638
+      },
+      "false_confident_rate": {
+        "successes": 12,
+        "total": 30,
+        "tickets": 10,
+        "value": 0.4,
+        "ci_low": 0.16818032970623614,
+        "ci_high": 0.6873262302663417
+      },
+      "escalation_recall": {
+        "successes": 0,
+        "total": 9,
+        "tickets": 3,
+        "value": 0.0,
+        "ci_low": 5.551115123125783e-17,
+        "ci_high": 0.5614970317550454
+      },
+      "unexpected_outcomes": 0,
+      "latency_p50_ms": 19.751050014747307,
+      "latency_p95_ms": 39.99341998278391,
+      "tokens_per_ticket": 89.0,
+      "stable_tickets": {
+        "successes": 10,
+        "total": 10,
+        "tickets": 10,
+        "value": 1.0,
+        "ci_low": 0.7224672001371107,
+        "ci_high": 0.9999999999999999
+      }
+    },
+    "pii": {
+      "name": "pii",
+      "tickets": 10,
+      "runs": 3,
+      "decision_accuracy": {
+        "successes": 30,
+        "total": 30,
+        "tickets": 10,
+        "value": 1.0,
+        "ci_low": 0.7224672001371107,
+        "ci_high": 0.9999999999999999
+      },
+      "category_accuracy": {
+        "successes": 30,
+        "total": 30,
+        "tickets": 10,
+        "value": 1.0,
+        "ci_low": 0.7224672001371107,
+        "ci_high": 0.9999999999999999
+      },
+      "priority_accuracy": {
+        "successes": 30,
+        "total": 30,
+        "tickets": 10,
+        "value": 1.0,
+        "ci_low": 0.7224672001371107,
+        "ci_high": 0.9999999999999999
+      },
+      "routing_accuracy": {
+        "successes": 30,
+        "total": 30,
+        "tickets": 10,
+        "value": 1.0,
+        "ci_low": 0.7224672001371107,
+        "ci_high": 0.9999999999999999
+      },
+      "auto_resolution_rate": {
+        "successes": 30,
+        "total": 30,
+        "tickets": 10,
+        "value": 1.0,
+        "ci_low": 0.7224672001371107,
+        "ci_high": 0.9999999999999999
+      },
+      "escalation_rate": {
+        "successes": 0,
+        "total": 30,
+        "tickets": 10,
+        "value": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.2775327998628892
+      },
+      "accuracy_when_auto_resolved": {
+        "successes": 30,
+        "total": 30,
+        "tickets": 10,
+        "value": 1.0,
+        "ci_low": 0.7224672001371107,
+        "ci_high": 0.9999999999999999
+      },
+      "false_confident_rate": {
+        "successes": 0,
+        "total": 30,
+        "tickets": 10,
+        "value": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.2775327998628892
+      },
+      "escalation_recall": {
+        "successes": 0,
+        "total": 0,
+        "tickets": 0,
+        "value": null,
+        "ci_low": null,
+        "ci_high": null
+      },
+      "unexpected_outcomes": 0,
+      "latency_p50_ms": 20.05654999811668,
+      "latency_p95_ms": 23.966200005088464,
+      "tokens_per_ticket": 0.0,
+      "stable_tickets": {
+        "successes": 10,
+        "total": 10,
+        "tickets": 10,
+        "value": 1.0,
+        "ci_low": 0.7224672001371107,
+        "ci_high": 0.9999999999999999
+      }
+    },
+    "multi_issue": {
+      "name": "multi_issue",
+      "tickets": 10,
+      "runs": 3,
+      "decision_accuracy": {
+        "successes": 18,
+        "total": 30,
+        "tickets": 10,
+        "value": 0.6,
+        "ci_low": 0.31267376973365824,
+        "ci_high": 0.8318196702937638
+      },
+      "category_accuracy": {
+        "successes": 21,
+        "total": 27,
+        "tickets": 9,
+        "value": 0.7777777777777778,
+        "ci_low": 0.45258896910698887,
+        "ci_high": 0.9367748928821533
+      },
+      "priority_accuracy": {
+        "successes": 21,
+        "total": 27,
+        "tickets": 9,
+        "value": 0.7777777777777778,
+        "ci_low": 0.45258896910698887,
+        "ci_high": 0.9367748928821533
+      },
+      "routing_accuracy": {
+        "successes": 21,
+        "total": 27,
+        "tickets": 9,
+        "value": 0.7777777777777778,
+        "ci_low": 0.45258896910698887,
+        "ci_high": 0.9367748928821533
+      },
+      "auto_resolution_rate": {
+        "successes": 30,
+        "total": 30,
+        "tickets": 10,
+        "value": 1.0,
+        "ci_low": 0.7224672001371107,
+        "ci_high": 0.9999999999999999
+      },
+      "escalation_rate": {
+        "successes": 0,
+        "total": 30,
+        "tickets": 10,
+        "value": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.2775327998628892
+      },
+      "accuracy_when_auto_resolved": {
+        "successes": 18,
+        "total": 30,
+        "tickets": 10,
+        "value": 0.6,
+        "ci_low": 0.31267376973365824,
+        "ci_high": 0.8318196702937638
+      },
+      "false_confident_rate": {
+        "successes": 12,
+        "total": 30,
+        "tickets": 10,
+        "value": 0.4,
+        "ci_low": 0.16818032970623614,
+        "ci_high": 0.6873262302663417
+      },
+      "escalation_recall": {
+        "successes": 0,
+        "total": 3,
+        "tickets": 1,
+        "value": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.7934506856227626
+      },
+      "unexpected_outcomes": 0,
+      "latency_p50_ms": 19.956200005253777,
+      "latency_p95_ms": 22.28153500618646,
+      "tokens_per_ticket": 0.0,
+      "stable_tickets": {
+        "successes": 10,
+        "total": 10,
+        "tickets": 10,
+        "value": 1.0,
+        "ci_low": 0.7224672001371107,
+        "ci_high": 0.9999999999999999
+      }
+    },
+    "ambiguous": {
+      "name": "ambiguous",
+      "tickets": 10,
+      "runs": 3,
+      "decision_accuracy": {
+        "successes": 12,
+        "total": 30,
+        "tickets": 10,
+        "value": 0.4,
+        "ci_low": 0.16818032970623614,
+        "ci_high": 0.6873262302663417
+      },
+      "category_accuracy": {
+        "successes": 15,
+        "total": 15,
+        "tickets": 5,
+        "value": 1.0,
+        "ci_low": 0.5655175352168251,
+        "ci_high": 1.0
+      },
+      "priority_accuracy": {
+        "successes": 12,
+        "total": 15,
+        "tickets": 5,
+        "value": 0.8,
+        "ci_low": 0.37553462976252533,
+        "ci_high": 0.9637758913675698
+      },
+      "routing_accuracy": {
+        "successes": 15,
+        "total": 15,
+        "tickets": 5,
+        "value": 1.0,
+        "ci_low": 0.5655175352168251,
+        "ci_high": 1.0
+      },
+      "auto_resolution_rate": {
+        "successes": 30,
+        "total": 30,
+        "tickets": 10,
+        "value": 1.0,
+        "ci_low": 0.7224672001371107,
+        "ci_high": 0.9999999999999999
+      },
+      "escalation_rate": {
+        "successes": 0,
+        "total": 30,
+        "tickets": 10,
+        "value": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.2775327998628892
+      },
+      "accuracy_when_auto_resolved": {
+        "successes": 12,
+        "total": 30,
+        "tickets": 10,
+        "value": 0.4,
+        "ci_low": 0.16818032970623614,
+        "ci_high": 0.6873262302663417
+      },
+      "false_confident_rate": {
+        "successes": 18,
+        "total": 30,
+        "tickets": 10,
+        "value": 0.6,
+        "ci_low": 0.31267376973365824,
+        "ci_high": 0.8318196702937638
+      },
+      "escalation_recall": {
+        "successes": 0,
+        "total": 15,
+        "tickets": 5,
+        "value": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.43448246478317476
+      },
+      "unexpected_outcomes": 0,
+      "latency_p50_ms": 30.377500006579794,
+      "latency_p95_ms": 1072.060035004688,
+      "tokens_per_ticket": 603.5,
+      "stable_tickets": {
+        "successes": 10,
+        "total": 10,
+        "tickets": 10,
+        "value": 1.0,
+        "ci_low": 0.7224672001371107,
+        "ci_high": 0.9999999999999999
+      }
+    },
+    "must_escalate": {
+      "name": "must_escalate",
+      "tickets": 10,
+      "runs": 3,
+      "decision_accuracy": {
+        "successes": 0,
+        "total": 30,
+        "tickets": 10,
+        "value": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.2775327998628892
+      },
+      "category_accuracy": {
+        "successes": 0,
+        "total": 0,
+        "tickets": 0,
+        "value": null,
+        "ci_low": null,
+        "ci_high": null
+      },
+      "priority_accuracy": {
+        "successes": 0,
+        "total": 0,
+        "tickets": 0,
+        "value": null,
+        "ci_low": null,
+        "ci_high": null
+      },
+      "routing_accuracy": {
+        "successes": 0,
+        "total": 0,
+        "tickets": 0,
+        "value": null,
+        "ci_low": null,
+        "ci_high": null
+      },
+      "auto_resolution_rate": {
+        "successes": 30,
+        "total": 30,
+        "tickets": 10,
+        "value": 1.0,
+        "ci_low": 0.7224672001371107,
+        "ci_high": 0.9999999999999999
+      },
+      "escalation_rate": {
+        "successes": 0,
+        "total": 30,
+        "tickets": 10,
+        "value": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.2775327998628892
+      },
+      "accuracy_when_auto_resolved": {
+        "successes": 0,
+        "total": 30,
+        "tickets": 10,
+        "value": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.2775327998628892
+      },
+      "false_confident_rate": {
+        "successes": 30,
+        "total": 30,
+        "tickets": 10,
+        "value": 1.0,
+        "ci_low": 0.7224672001371107,
+        "ci_high": 0.9999999999999999
+      },
+      "escalation_recall": {
+        "successes": 0,
+        "total": 30,
+        "tickets": 10,
+        "value": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.2775327998628892
+      },
+      "unexpected_outcomes": 0,
+      "latency_p50_ms": 20.011600005091168,
+      "latency_p95_ms": 840.0509649887681,
+      "tokens_per_ticket": 349.7,
+      "stable_tickets": {
+        "successes": 10,
+        "total": 10,
+        "tickets": 10,
+        "value": 1.0,
+        "ci_low": 0.7224672001371107,
+        "ci_high": 0.9999999999999999
+      }
+    }
+  },
+  "confident_errors": [
+    {
+      "case_id": "IND-041",
+      "split": "in_dist",
+      "subtype": "standard",
+      "expected": "software_request / P4 / software_licensing",
+      "got": "auto_resolved: end_user_hardware / P4 / desktop_support"
+    },
+    {
+      "case_id": "OOD-003",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "access_identity / P4 / identity_access",
+      "got": "auto_resolved: access_identity / P4 / service_desk_l1"
+    },
+    {
+      "case_id": "OOD-004",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "access_identity / P4 / identity_access",
+      "got": "auto_resolved: email_collaboration / P4 / collaboration_platforms"
+    },
+    {
+      "case_id": "OOD-005",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "access_identity / P4 / identity_access",
+      "got": "auto_resolved: access_identity / P4 / service_desk_l1"
+    },
+    {
+      "case_id": "OOD-009",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "clinical_applications / P1 / clinical_apps_support",
+      "got": "auto_resolved: clinical_applications / P2 / clinical_apps_support"
+    },
+    {
+      "case_id": "OOD-010",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "clinical_applications / P1 / clinical_apps_support",
+      "got": "auto_resolved: clinical_applications / P2 / clinical_apps_support"
+    },
+    {
+      "case_id": "OOD-013",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "clinical_devices / P2 / clinical_engineering",
+      "got": "auto_resolved: clinical_devices / P3 / clinical_engineering"
+    },
+    {
+      "case_id": "OOD-014",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "clinical_devices / P2 / clinical_engineering",
+      "got": "auto_resolved: printing / P4 / desktop_support"
+    },
+    {
+      "case_id": "OOD-015",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "clinical_devices / P2 / clinical_engineering",
+      "got": "auto_resolved: clinical_applications / P2 / clinical_apps_support"
+    },
+    {
+      "case_id": "OOD-016",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "clinical_devices / P1 / clinical_engineering",
+      "got": "auto_resolved: clinical_devices / P2 / clinical_engineering"
+    },
+    {
+      "case_id": "OOD-024",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "network_connectivity / P4 / network_operations",
+      "got": "auto_resolved: end_user_hardware / P4 / desktop_support"
+    },
+    {
+      "case_id": "OOD-025",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "network_connectivity / P1 / network_operations",
+      "got": "auto_resolved: network_connectivity / P2 / network_operations"
+    },
+    {
+      "case_id": "OOD-026",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "network_connectivity / P4 / network_operations",
+      "got": "auto_resolved: end_user_hardware / P4 / desktop_support"
+    },
+    {
+      "case_id": "OOD-031",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "email_collaboration / P4 / collaboration_platforms",
+      "got": "auto_resolved: network_connectivity / P3 / network_operations"
+    },
+    {
+      "case_id": "OOD-042",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "security_incident / P1 / security_operations",
+      "got": "auto_resolved: security_incident / P3 / security_operations"
+    },
+    {
+      "case_id": "OOD-045",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "network_connectivity / P2 / network_operations",
+      "got": "auto_resolved: network_connectivity / P3 / network_operations"
+    },
+    {
+      "case_id": "OOD-047",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "clinical_applications / P1 / clinical_apps_support",
+      "got": "auto_resolved: clinical_applications / P2 / clinical_apps_support"
+    },
+    {
+      "case_id": "OOD-048",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "end_user_hardware / P4 / desktop_support",
+      "got": "auto_resolved: software_request / P4 / software_licensing"
+    },
+    {
+      "case_id": "OOD-049",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "end_user_hardware / P3 / desktop_support",
+      "got": "auto_resolved: end_user_hardware / P4 / desktop_support"
+    },
+    {
+      "case_id": "OOD-050",
+      "split": "ood",
+      "subtype": "standard",
+      "expected": "access_identity / P2 / identity_access",
+      "got": "auto_resolved: access_identity / P3 / service_desk_l1"
+    },
+    {
+      "case_id": "ADV-003",
+      "split": "adversarial",
+      "subtype": "prompt_injection",
+      "expected": "software_request / P4 / software_licensing",
+      "got": "auto_resolved: end_user_hardware / P4 / desktop_support"
+    },
+    {
+      "case_id": "ADV-007",
+      "split": "adversarial",
+      "subtype": "prompt_injection",
+      "expected": "escalate (security_incident / P3 / security_operations)",
+      "got": "auto_resolved: email_collaboration / P4 / collaboration_platforms"
+    },
+    {
+      "case_id": "ADV-008",
+      "split": "adversarial",
+      "subtype": "prompt_injection",
+      "expected": "escalate (security_incident / P3 / security_operations)",
+      "got": "auto_resolved: security_incident / P3 / security_operations"
+    },
+    {
+      "case_id": "ADV-010",
+      "split": "adversarial",
+      "subtype": "prompt_injection",
+      "expected": "escalate (security_incident / P3 / security_operations)",
+      "got": "auto_resolved: security_incident / P3 / security_operations"
+    },
+    {
+      "case_id": "ADV-024",
+      "split": "adversarial",
+      "subtype": "multi_issue",
+      "expected": "software_request / P4 / software_licensing",
+      "got": "auto_resolved: network_connectivity / P4 / network_operations"
+    },
+    {
+      "case_id": "ADV-028",
+      "split": "adversarial",
+      "subtype": "multi_issue",
+      "expected": "security_incident / P2 / security_operations",
+      "got": "auto_resolved: end_user_hardware / P3 / desktop_support"
+    },
+    {
+      "case_id": "ADV-029",
+      "split": "adversarial",
+      "subtype": "multi_issue",
+      "expected": "clinical_applications / P1 / clinical_apps_support",
+      "got": "auto_resolved: clinical_applications / P2 / clinical_apps_support"
+    },
+    {
+      "case_id": "ADV-030",
+      "split": "adversarial",
+      "subtype": "multi_issue",
+      "expected": "escalate (security_incident / P1 / security_operations)",
+      "got": "auto_resolved: security_incident / P2 / security_operations"
+    },
+    {
+      "case_id": "ADV-031",
+      "split": "adversarial",
+      "subtype": "ambiguous",
+      "expected": "escalate (undeterminable)",
+      "got": "auto_resolved: end_user_hardware / P4 / desktop_support"
+    },
+    {
+      "case_id": "ADV-032",
+      "split": "adversarial",
+      "subtype": "ambiguous",
+      "expected": "escalate (undeterminable)",
+      "got": "auto_resolved: end_user_hardware / P4 / desktop_support"
+    },
+    {
+      "case_id": "ADV-033",
+      "split": "adversarial",
+      "subtype": "ambiguous",
+      "expected": "escalate (undeterminable)",
+      "got": "auto_resolved: end_user_hardware / P4 / desktop_support"
+    },
+    {
+      "case_id": "ADV-034",
+      "split": "adversarial",
+      "subtype": "ambiguous",
+      "expected": "escalate (undeterminable)",
+      "got": "auto_resolved: clinical_applications / P2 / clinical_apps_support"
+    },
+    {
+      "case_id": "ADV-035",
+      "split": "adversarial",
+      "subtype": "ambiguous",
+      "expected": "escalate (undeterminable)",
+      "got": "auto_resolved: end_user_hardware / P4 / desktop_support"
+    },
+    {
+      "case_id": "ADV-038",
+      "split": "adversarial",
+      "subtype": "ambiguous",
+      "expected": "clinical_devices / P2 / clinical_engineering",
+      "got": "auto_resolved: clinical_devices / P3 / clinical_engineering"
+    },
+    {
+      "case_id": "ADV-041",
+      "split": "adversarial",
+      "subtype": "must_escalate",
+      "expected": "escalate (email_collaboration / P4 / collaboration_platforms)",
+      "got": "auto_resolved: access_identity / P4 / service_desk_l1"
+    },
+    {
+      "case_id": "ADV-042",
+      "split": "adversarial",
+      "subtype": "must_escalate",
+      "expected": "escalate (security_incident / P1 / security_operations)",
+      "got": "auto_resolved: security_incident / P2 / security_operations"
+    },
+    {
+      "case_id": "ADV-043",
+      "split": "adversarial",
+      "subtype": "must_escalate",
+      "expected": "escalate (access_identity / P4 / service_desk_l1)",
+      "got": "auto_resolved: security_incident / P3 / security_operations"
+    },
+    {
+      "case_id": "ADV-044",
+      "split": "adversarial",
+      "subtype": "must_escalate",
+      "expected": "escalate (access_identity / P3 / identity_access)",
+      "got": "auto_resolved: access_identity / P4 / identity_access"
+    },
+    {
+      "case_id": "ADV-045",
+      "split": "adversarial",
+      "subtype": "must_escalate",
+      "expected": "escalate (email_collaboration / P4 / collaboration_platforms)",
+      "got": "auto_resolved: email_collaboration / P4 / collaboration_platforms"
+    },
+    {
+      "case_id": "ADV-046",
+      "split": "adversarial",
+      "subtype": "must_escalate",
+      "expected": "escalate (email_collaboration / P4 / collaboration_platforms)",
+      "got": "auto_resolved: email_collaboration / P4 / collaboration_platforms"
+    },
+    {
+      "case_id": "ADV-047",
+      "split": "adversarial",
+      "subtype": "must_escalate",
+      "expected": "escalate (access_identity / P4 / identity_access)",
+      "got": "auto_resolved: end_user_hardware / P3 / desktop_support"
+    },
+    {
+      "case_id": "ADV-048",
+      "split": "adversarial",
+      "subtype": "must_escalate",
+      "expected": "escalate (security_incident / P3 / security_operations)",
+      "got": "auto_resolved: security_incident / P3 / security_operations"
+    },
+    {
+      "case_id": "ADV-049",
+      "split": "adversarial",
+      "subtype": "must_escalate",
+      "expected": "escalate (access_identity / P3 / service_desk_l1)",
+      "got": "auto_resolved: access_identity / P3 / service_desk_l1"
+    },
+    {
+      "case_id": "ADV-050",
+      "split": "adversarial",
+      "subtype": "must_escalate",
+      "expected": "escalate (access_identity / P4 / identity_access)",
+      "got": "auto_resolved: end_user_hardware / P4 / desktop_support"
+    }
+  ]
+}

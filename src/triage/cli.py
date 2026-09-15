@@ -24,10 +24,12 @@ from triage.container import (
     Container,
     build_container,
     build_v1,
+    hybrid_benchmark_factory,
     init_cmdb,
     v1_benchmark_factory,
 )
 from triage.contracts import InboundMessage, TriagePipeline, TriageResult
+from triage.llm.cassette import CassetteMode
 from triage.v1.intake import EmailFileIntake
 
 app = typer.Typer(no_args_is_help=True, add_completion=False, help="Service-desk ticket triage.")
@@ -129,10 +131,16 @@ def review_sheet(
 
 class BenchPipeline(StrEnum):
     V1 = "v1"
+    V1_5 = "v1.5"
 
 
-_BENCH_FACTORIES: dict[BenchPipeline, Callable[[Settings], Callable[[int], TriagePipeline]]] = {
-    BenchPipeline.V1: v1_benchmark_factory,
+BenchFactoryBuilder = Callable[[Settings, CassetteMode], Callable[[int], TriagePipeline]]
+
+_BENCH_FACTORIES: dict[BenchPipeline, BenchFactoryBuilder] = {
+    BenchPipeline.V1: lambda settings, _llm_mode: v1_benchmark_factory(settings),
+    BenchPipeline.V1_5: lambda settings, llm_mode: hybrid_benchmark_factory(
+        settings, llm_mode=llm_mode
+    ),
 }
 
 
@@ -154,6 +162,13 @@ def bench(
     allow_draft: Annotated[
         bool, typer.Option("--allow-draft", help="Run on labels nobody has reviewed yet.")
     ] = False,
+    llm_mode: Annotated[
+        CassetteMode,
+        typer.Option(
+            help="v1.5/v2 only: 'replay' needs no key (CI); "
+            "'replay_or_record' calls the provider only for tickets with no cassette yet."
+        ),
+    ] = "replay_or_record",
 ) -> None:
     """Grade a pipeline on the golden set: results, summary and charts. Exit 1 on regression."""
     from triage.bench.charts import plot_outcomes, plot_rates  # matplotlib is a dev dependency
@@ -175,7 +190,11 @@ def bench(
         raise typer.Exit(code=2)
 
     runs = repeats or bench_config.default_repeats
-    factory = _BENCH_FACTORIES[pipeline](settings)
+    try:
+        factory = _BENCH_FACTORIES[pipeline](settings, llm_mode)
+    except ConfigError as exc:
+        typer.echo(f"benchmark input invalid: {exc}", err=True)
+        raise typer.Exit(code=1) from exc
     case_runs = run_benchmark(golden, factory, repeats=runs, config=bench_config)
     scored = [(case_run, score_case(case_run)) for case_run in case_runs]
     summary = summarise(
