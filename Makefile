@@ -8,7 +8,8 @@ export UV_PROJECT_ENVIRONMENT ?= $(subst \,/,$(LOCALAPPDATA))/service-desk-triag
 endif
 
 .PHONY: help install lint format typecheck imports test-unit test-integration test check \
-	config-check review-sheet bench bench-check demo serve docker-build docker-run clean
+	config-check review-sheet bench bench-check notebook notebook-run demo serve \
+	docker-build docker-run clean
 
 help: ## List targets
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-14s %s\n", $$1, $$2}'
@@ -54,6 +55,15 @@ bench: ## Grade v1 on the golden set into reports/benchmark/ (labels must be rev
 
 bench-check: ## CI: grade v1 into var/bench-ci; fail on regression against the committed baseline
 	uv run triage bench --pipeline v1 --out var/bench-ci $(if $(wildcard $(BASELINE)),--baseline $(BASELINE),)
+
+NOTEBOOK := notebooks/service_desk_triage.ipynb
+
+notebook: ## Open the guided tour of all three pipelines in JupyterLab
+	uv run jupyter lab $(NOTEBOOK)
+
+notebook-run: ## Re-execute the notebook in place (replays cassettes; no API key needed)
+	uv run jupyter nbconvert --to notebook --execute --inplace \
+		--ExecutePreprocessor.timeout=600 $(NOTEBOOK)
 
 demo: ## Triage the sample emails with v1
 	uv run triage run data/samples

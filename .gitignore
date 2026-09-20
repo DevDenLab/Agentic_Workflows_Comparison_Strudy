@@ -18,4 +18,12 @@ htmlcov/
 
 # runtime state (SQLite, DLQ, vector indexes) — normally lives in VAR_DIR outside the repo
 var/
-reports/benchmark/*/results.jsonl
+
+# Per-case benchmark rows. Committed (560K for all three) because the notebook reads them back:
+# summary.json has the aggregates, but only these rows show *which* tickets were escalated with a
+# correct draft, which is the evidence for section 4.7. Regenerate with `make bench`.
+!reports/benchmark/*/results.jsonl
+
+# notebook scratch state — one SQLite dir per pipeline, wiped on every Lab.open()
+.notebook-state/
+.ipynb_checkpoints/
