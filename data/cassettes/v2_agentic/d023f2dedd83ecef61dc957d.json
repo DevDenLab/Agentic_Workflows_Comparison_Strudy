@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: clinical_devices\nProposed urgency: high\nReasoning given: The primary actionable fault is a barcode scanner on the ICU care unit failing to read armbands, which the rule engine and the clinical-devices runbook both map to clinical_devices; the runbook notes a scanner fault and a faint wristband label look identical, and a historical case resolved the same symptom via wristband printer ribbon replacement. The co-reported patchy ICU Wi-Fi is a coverage issue (HIST-017) but the scanner failure at the bedside blocks patient identification/medication scanning, so urgency is high.\n\nCited excerpts:\n- rule R031 matched 'barcode scanner' -> category clinical_devices, urgency high\n\n- Barcode scanners not reading wristbands\n1. Confirm the wristband label itself is legible and not printed faint (see the wristband printer\n   section below); a scanner fault and a bad label look identical to the end user.\n2. Re-pair the scanner to its base station: hold the trigger for 5 seconds until it beeps twice.\n3. If several scanners on the same unit fail at once, the base station or its network drop is the\n   more likely cause than the individual scanners; escalate as a unit-wide issue.\n\n- Scanner won't read new armbands: New wristband stock had a slightly different print contrast; ribbon replacement on the wristband printer fixed legibility and scanning both. (resolved as clinical_devices / P2)\n\n- Wifi drops in the stairwell office: Confirmed a coverage gap for that room; added to the access-point placement backlog rather than troubleshooting the laptop further. (resolved as network_connectivity / P4)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": true, \"reason\": \"Each claim maps to a cited excerpt: R031 matches the scanner-to-clinical_devices/high mapping, the runbook excerpt confirms scanner fault vs faint label ambiguity, the historical case shows the same symptom resolved as clinical_devices, and the Wi-Fi excerpt supports treating the coverage gap as a separate network issue.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_rD0uKHrdIVPQ5Xrmxgrj8908",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789437039,
+    "id": "78d01857-bf42-4be1-bdf2-cbf26ccf2a62",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 113,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 591,
+      "prompt_tokens": 719,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 832
+    }
+  }
+}

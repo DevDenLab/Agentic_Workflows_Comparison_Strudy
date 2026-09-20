@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: security_incident\nProposed urgency: high\nReasoning given: The ticket describes files suddenly encrypted with a bitcoin ransom demand \u2014 a classic ransomware/ransom-note scenario, which the runbook treats as an immediate network-isolation security incident (matching resolved ticket HIST-016, P1/security_operations). The keyword rule engine did not match this phrasing, so it would have been misrouted; urgency is high because this is an active compromise that can spread.\n\nCited excerpts:\n- Ransomware / files suddenly encrypted or inaccessible with a ransom note\nIsolate the device from the network immediately (unplug it / disable Wi-Fi) rather than trying to\nread or interact with the note. This is the one situation where doing nothing else first is correct.\n\n- Ransom note on my screen: Device isolated from the network immediately per the ransomware runbook; confirmed contained to a single endpoint, reimaged from backup. (resolved as security_incident / P1)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": true, \"reason\": \"Both cited excerpts directly support the reasoning: the runbook excerpt describes ransomware with a ransom note requiring immediate network isolation, and the resolved ticket excerpt confirms a ransom-note incident handled as security_incident/P1, matching the proposed category and high urgency.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_9NT8Vi65N2Xs1C3A0FSt5969",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436911,
+    "id": "3a56d2b6-3838-4d9b-b1a0-949ed51dd2d7",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 101,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 448,
+      "prompt_tokens": 576,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 677
+    }
+  }
+}

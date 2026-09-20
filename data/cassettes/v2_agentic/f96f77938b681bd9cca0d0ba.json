@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: email_collaboration\nProposed urgency: low\nReasoning given: Meeting reminders are a calendar/Outlook collaboration feature, so this falls under email_collaboration; the closest resolved case (HIST-010) was handled by the collaboration_platforms group. It's a minor inconvenience with an easy workaround (checking the calendar directly), so urgency is low. The keyword rule engine matched nothing, and the CMDB had no record for the requester token.\n\nCited excerpts:\n- Outlook keeps asking for my password: Cleared the cached credentials for the account in Windows Credential Manager; prompts stopped without a password reset. (resolved as email_collaboration / P4)\n\n- Shared mailbox or calendar access requests\nA request to be added to a team or shared mailbox is routine self-service once a manager or an\nexisting delegate approves it. A request for someone's individual mailbox is not the same category;\nsee the access-and-identity runbook.",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": false, \"reason\": \"The cited excerpts concern an Outlook password prompt resolved via credential clearing and shared mailbox/calendar access requests, neither of which supports the claim that meeting reminders are a calendar/Outlook collaboration feature or that HIST-010 was handled by the collaboration_platforms group.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_Qn9uw5I5gsGsCPE2u6hj1284",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436846,
+    "id": "553c8d2d-1977-4ebb-a124-9cd28c723b95",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 102,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 445,
+      "prompt_tokens": 573,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 675
+    }
+  }
+}

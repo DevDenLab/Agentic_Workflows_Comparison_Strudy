@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: clinical_applications\nProposed urgency: high\nReasoning given: The ticket is nearly content-free: no system, device, or symptom is named, the keyword engine matched nothing, no similar resolved tickets exist, and the requester token is not in the CMDB. The only signal is \"patients are waiting,\" which points to a patient-care-impacting clinical system failure, so I classify it as clinical_applications at high urgency and flag that the ticket must be returned to the requester for the specific application, unit, and error before any runbook can be applied.\n\nCited excerpts:\n- Frozen or unresponsive while charting\n1. Confirm the issue is local, not organisation-wide: ask if colleagues on the same unit are affected.\n2. Ask the user to note the exact screen and patient context where it froze. Do not have them\n   restart the workstation until confirmed no unsaved note can be recovered.\n3. A single frozen session on one workstation: restart the EMR client, not the device.\n4. Repeated freezes tied to the medication administration record specifically: known interaction\n   with a slow print spooler on workstations-on-wheels; restart the print spooler service.\n5. If multipl",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": false, \"reason\": \"The cited excerpt is a runbook for a frozen/unresponsive EMR charting session, which contradicts the reasoning's claim that the ticket is \\\"nearly content-free\\\" with \\\"no system, device, or symptom named\\\" and that no runbook can be applied \u2014 the excerpt names the symptom (freezing while charting), the system (EMR client), and provides applicable steps.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_fqlYpLtfF41gNc6D3H9V6950",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789437091,
+    "id": "438743ef-8704-4957-bdf2-0f353e038732",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 128,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 497,
+      "prompt_tokens": 625,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 753
+    }
+  }
+}

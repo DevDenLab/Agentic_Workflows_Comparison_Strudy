@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: software_request\nProposed urgency: medium\nReasoning given: Excel crashing on a specific workbook is an application/software problem affecting one user's normal work with no patient-care or security impact, so it is medium urgency. No tool returned usable evidence (apply_rules no match, kb_search and similar_tickets empty), so no citations are given; the closest category is software_request since it concerns an installed application's behaviour rather than identity, device, network, or clinical systems.\n\nCited excerpts:\n(no citations)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": false, \"reason\": \"The reasoning cites no excerpts at all, so its claims about Excel crashing, single-user impact, and absence of patient-care or security impact are entirely unsupported by the provided evidence.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_54ybMoGCb6YF66yj7JLL1842",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436788,
+    "id": "be8607fc-1da2-4f18-91fd-8fd257a58bab",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 86,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 349,
+      "prompt_tokens": 477,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 563
+    }
+  }
+}

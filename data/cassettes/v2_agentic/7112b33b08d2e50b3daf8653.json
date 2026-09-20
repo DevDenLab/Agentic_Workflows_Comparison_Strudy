@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: clinical_applications\nProposed urgency: high\nReasoning given: The ticket describes X-ray images failing to render (grey box) in the imaging/PACS viewer on a reading station \u2014 an application-level failure in a clinical imaging application, not a hardware or network fault (the rule engine matched nothing, and no hardware/network runbook applies). Because a radiologist cannot read this morning's studies, patient care is directly impeded, so urgency is high; escalate to Clinical Applications Support with the exact error text per the EMR/clinical-app runbook.\n\nCited excerpts:\n- EMR sign-in fails but the network account works\nThis is usually an EMR-specific credential, not the network password. Do not reset the network\npassword for this. Escalate to Clinical Applications Support with the exact error text.",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": false, \"reason\": \"The only cited excerpt concerns EMR sign-in credential failures and says nothing about X-ray images failing to render, a grey box, PACS/imaging viewers, reading stations, or patient-care impact, so the reasoning's claims are not supported by the excerpts it cites.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_6mAZMYFh6Si5PZ6I8Pi55520",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436712,
+    "id": "03eec784-8ae1-42ce-9e68-04674d396253",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 104,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 410,
+      "prompt_tokens": 538,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 642
+    }
+  }
+}

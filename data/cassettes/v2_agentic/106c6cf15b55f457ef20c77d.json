@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: email_collaboration\nProposed urgency: low\nReasoning given: The requester's display name and email signature still show a pre-marriage last name \u2014 a directory/profile update affecting email identity, not a fault or security event. The rule engine matched email_collaboration/low (R050), and the CMDB has no record of the requester, so no asset or identity escalation is warranted; this is a routine low-urgency request.\n\nCited excerpts:\n- rule R050 matched 'email' -> category email_collaboration, urgency low\n\n- Scan-to-email not sending\nThis is usually the printer's stored SMTP credentials expiring, not a problem with the destination\nmailbox. Confirm the destination address is correct before escalating as an email-delivery issue.\n\n- Scan to email not arriving: The printer's stored SMTP credentials had expired after a password rotation; re-entered current credentials on the device. (resolved as printing / P4)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": false, \"reason\": \"The cited excerpts are about scan-to-email/SMTP printer failures, which do not support the reasoning's claims about a display-name/signature name change, a CMDB record absence, or a routine directory/profile update.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_oJgnF0zag4lD8AAgUAV71800",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789437122,
+    "id": "a8569e29-da66-4392-b476-5ce083e96937",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 96,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 445,
+      "prompt_tokens": 573,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 669
+    }
+  }
+}

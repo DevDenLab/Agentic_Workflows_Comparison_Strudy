@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: clinical_devices\nProposed urgency: medium\nReasoning given: The ticket describes a workstation-on-wheels (charting cart) battery draining within a couple of hours, which the WOW runbook classifies as a battery replacement issue rather than a software fault, matching resolved ticket HIST-025 (clinical_devices, battery past rated cycle count). The keyword rule engine's clinical_applications/high match on \"charting\" is a false positive \u2014 no EMR application error is reported \u2014 and the cart is a care-unit device, so clinical_devices is correct; urgency is medium since it blocks one cart's use with a docking workaround and no immediate patient harm.\n\nCited excerpts:\n- rule R020 matched 'charting' -> category clinical_applications, urgency high\n\n- Workstation on wheels (WOW) / medication cart problems\n- Won't power on: check the cart is docked and the dock's indicator light is green, not amber.\n- Battery dies within an hour: batteries are rated for an 8-hour shift; anything under 3 hours is a\n  battery replacement, not a software issue.\n- Shuts off mid-use: this is almost always thermal shutdown from a blocked vent on the cart, not the\n  computer itself. Confirm nothing is stacked on top of the cart.\n\n- Cart battery dies fast: Battery was well past its rated cycle count; scheduled for replacement, no software fault. (resolved as clinical_devices / P3)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": true, \"reason\": \"The excerpts directly support each claim: the WOW runbook states sub-3-hour battery life is a battery replacement rather than a software issue, HIST-025 confirms a fast-draining cart battery resolved as clinical_devices/P3, and the rule R020 match on \\\"charting\\\" is shown with no EMR error reported, so the reasoning is grounded.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_fSeozN9INRLy7ij2QdfE0928",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436755,
+    "id": "f94aa205-4819-4c25-ac58-a4f9ac2c676c",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 123,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 550,
+      "prompt_tokens": 678,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 801
+    }
+  }
+}

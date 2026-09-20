@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: network_connectivity\nProposed urgency: medium\nReasoning given: A single wall ethernet port in room 204 provides no connectivity \u2014 a wired network fault, matching rule R041 and historical case HIST-030 where a switch port had been disabled. It blocks one person's work with no patient-care or security impact, so medium urgency; the KB note on \"no internet\" patterns supports treating this as a link/port issue rather than a device fault.\n\nCited excerpts:\n- rule R041 matched 'no internet' -> category network_connectivity, urgency medium\n\n- Network cable dead in meeting room: Wall port was disabled at the switch from a previous move; re-enabled the port, connection restored. (resolved as network_connectivity / P4)\n\n- \"No internet\" but internal apps still work\nThis pattern (internal reachable, internet not) points at DNS or a proxy/firewall rule, not a\nphysical link problem. A physical link problem breaks both at once.",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": false, \"reason\": \"The cited KB excerpt explicitly says a \\\"no internet\\\" pattern with internal apps working points at DNS/proxy, not a physical link problem, which contradicts the reasoning's claim that the KB supports treating this as a link/port issue.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_ZObLkHGEzyC0aUuZmgs66504",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436558,
+    "id": "64f09ac8-1790-4859-a96e-e19e6441af11",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 97,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 449,
+      "prompt_tokens": 577,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 674
+    }
+  }
+}

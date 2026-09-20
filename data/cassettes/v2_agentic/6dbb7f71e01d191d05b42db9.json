@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: email_collaboration\nProposed urgency: medium\nReasoning given: The ticket describes mail sent to a payroll (shared) inbox bouncing back as undeliverable \u2014 an email delivery/shared-mailbox issue, not a device or clinical problem. The rule engine matched nothing and the requester token isn't in the CMDB, so classification rests on the collaboration runbook and the closest historical case (HIST-026, email_collaboration). It blocks one person's normal work with no patient-care or security impact, so medium urgency.\n\nCited excerpts:\n- Shared mailbox or calendar access requests\nA request to be added to a team or shared mailbox is routine self-service once a manager or an\nexisting delegate approves it. A request for someone's individual mailbox is not the same category;\nsee the access-and-identity runbook.\n\n- Shared mailbox access needed: Manager approval confirmed, added as a delegate to the shared mailbox same day. (resolved as email_collaboration / P4)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": false, \"reason\": \"The cited excerpts only cover shared-mailbox access requests and a delegate-addition case, not mail bouncing back as undeliverable, so the reasoning's claim that the ticket is an email delivery/shared-mailbox issue is not supported by the excerpts.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_NGrElxqujFEIojYycibj1516",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436831,
+    "id": "ff2548d7-1c2e-460f-8f02-03398b2aff16",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 101,
+      "prompt_cache_hit_tokens": 256,
+      "prompt_cache_miss_tokens": 323,
+      "prompt_tokens": 579,
+      "prompt_tokens_details": {
+        "cached_tokens": 256
+      },
+      "total_tokens": 680
+    }
+  }
+}

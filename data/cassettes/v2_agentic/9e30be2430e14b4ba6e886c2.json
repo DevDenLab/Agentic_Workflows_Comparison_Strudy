@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: access_identity\nProposed urgency: medium\nReasoning given: Ticket is a straightforward account lockout from repeated failed sign-in attempts, matching rule R010 and the account-lockout runbook; the runbook advises waiting out the lockout window rather than immediate retries, so this blocks one person's work with no patient-care or security impact \u2014 medium urgency. No compromise indicators (no phishing, no unexpected MFA prompt) are present, so security_incident does not apply.\n\nCited excerpts:\n- rule R010 matched 'locked out' -> category access_identity, urgency medium\n\n- Account lockout\nLockouts clear automatically after the configured lockout window; retrying immediately extends it.\nAdvise the user to wait rather than repeatedly retrying. A manual unlock is only needed if the user\nreports being locked out for longer than the normal window.\n\n- Locked out again: Advised the user to wait out the lockout window rather than retrying, and to use the password manager's autofill instead of typing manually. (resolved as access_identity / P4)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": true, \"reason\": \"The excerpts directly support the reasoning: rule R010 matches \\\"locked out\\\" to access_identity/medium, the runbook excerpt advises waiting out the lockout window rather than retrying, and the resolved example confirms this pattern is handled as access_identity.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_jCs3hhTuhaxrISTL8q155144",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436432,
+    "id": "aa6ae868-6af1-42a1-b2de-c13042f58a72",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 102,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 470,
+      "prompt_tokens": 598,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 700
+    }
+  }
+}

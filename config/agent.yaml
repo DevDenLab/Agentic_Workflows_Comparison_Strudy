@@ -1,0 +1,30 @@
+# v2's agent loop, critic and confidence gate. Changing any threshold changes behaviour: bump
+# `version`, open a PR, re-run the benchmark.
+version: 1.0.0
+
+agent:
+  temperature: 0.0
+  max_output_tokens: 400
+  timeout_seconds: 30
+  max_repair_attempts: 2
+  max_tool_result_chars: 1500 # keeps the scratchpad bounded on a long tool result
+  extra_body:
+    thinking:
+      type: disabled # DeepSeek-specific: thinking mode rejects tool_choice: auto too
+
+critic:
+  temperature: 0.0
+  max_output_tokens: 150
+  timeout_seconds: 20
+  extra_body:
+    thinking:
+      type: disabled
+
+budget:
+  max_steps: 8 # tool calls + the final submit_decision call
+  max_total_tokens: 8000
+  max_wall_seconds: 60
+
+confidence:
+  threshold: 0.55
+  high_blast_radius_categories: [security_incident]

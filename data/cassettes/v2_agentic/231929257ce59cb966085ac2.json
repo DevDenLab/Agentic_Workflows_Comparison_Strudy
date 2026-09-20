@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: email_collaboration\nProposed urgency: low\nReasoning given: The ticket is a question about whether IT can see Teams messages, i.e. a collaboration-platform (Teams) matter, not a technical fault \u2014 the keyword engine also matched \"teams\" to email_collaboration. It is a request for information with no patient-care or security impact, so urgency is low; the underlying conduct concern is an HR matter, and any request to access another person's messages would need documented approval (cf. HIST-018), so no account access should be granted here.\n\nCited excerpts:\n- rule R050 matched 'teams' -> category email_collaboration, urgency low\n\n- Asked to reset a colleague's password: Declined as a routine reset; referred to identity governance for a documented approval before any access to another person's account. (resolved as access_identity / P4)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": false, \"reason\": \"The cited excerpts only show a keyword rule match for \\\"teams\\\" and an unrelated password-reset precedent; neither supports the reasoning's claims about the ticket being a Teams-visibility question, an HR conduct concern, or a request to access another person's messages.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_X469DMmbaESqmCaBI8Tm3567",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789437154,
+    "id": "bd07c812-e526-4f48-97b8-0cfc4154f284",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 103,
+      "prompt_cache_hit_tokens": 256,
+      "prompt_cache_miss_tokens": 302,
+      "prompt_tokens": 558,
+      "prompt_tokens_details": {
+        "cached_tokens": 256
+      },
+      "total_tokens": 661
+    }
+  }
+}

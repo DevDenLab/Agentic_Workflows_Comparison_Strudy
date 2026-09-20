@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: security_incident\nProposed urgency: high\nReasoning given: A company tablet was stolen along with the requester's bag, which is a lost/stolen-device security incident requiring immediate reporting and likely remote wipe; the runbook notes the data-protection duty starts at report time and the historical case was handled by security_operations with a precautionary remote wipe. Urgency is high because the device is in a thief's hands with possible patient data and saved credentials, even though the keyword rule engine matched nothing.\n\nCited excerpts:\n- Lost or stolen device\nThe organisation's data-protection duty starts the moment the device is reported missing, not when\nit is confirmed lost for good. Record what was on the device (patient data, saved credentials) as\npart of the initial report; that detail changes how urgently it needs to be handled.\n\n- Laptop left on the bus: Remote wipe initiated as a precaution once the device did not check in within the expected window; no recovery of the laptop. (resolved as security_incident / P3)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": true, \"reason\": \"The excerpts directly support the reasoning: the runbook states the data-protection duty starts at report time and to record patient data/saved credentials as affecting urgency, and the historical case shows a lost device resolved as security_incident with a precautionary remote wipe.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_IFfT6hWiuDdoEEuDYN270317",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436921,
+    "id": "5d1c0e9b-6b49-4122-8505-39d8703cd01d",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 103,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 462,
+      "prompt_tokens": 590,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 693
+    }
+  }
+}

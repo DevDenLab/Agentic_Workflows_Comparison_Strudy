@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: access_identity\nProposed urgency: medium\nReasoning given: The ticket asks for access to another individual's mailbox, which the runbook explicitly says is never a routine access grant regardless of framing (covering for someone on leave) and must go through identity governance with documented approval \u2014 so it is an access/identity case, not email_collaboration. It blocks the requester's work but poses no immediate patient-care or security harm, so medium urgency; the rule engine matched nothing and the named employee was not found in the CMDB.\n\nCited excerpts:\n- Requests to access another person's mailbox, files, or account\nThese are never handled as a routine password reset or access grant, however the requester frames\nit (a manager asking on behalf of a report, a colleague covering for someone on leave). They need a\ndocumented approval and go through identity governance, not first-line support.\n\n- Shared mailbox or calendar access requests\nA request to be added to a team or shared mailbox is routine self-service once a manager or an\nexisting delegate approves it. A request for someone's individual mailbox is not the same category;\nsee the access-and-identity runbook.\n\n- Shared mailbox access needed: Manager approval confirmed, added as a delegate to the shared mailbox same day. (resolved as email_collaboration / P4)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": true, \"reason\": \"The cited excerpts directly support the reasoning: the runbook states individual mailbox access requests are never routine grants and go through identity governance with documented approval, and the third excerpt confirms shared-mailbox grants are the separate email_collaboration case, so the access_identity categorization and medium-urgency rationale are grounded in the quoted text.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_kPJZ3vCwxFg4NfVugkf16044",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789437127,
+    "id": "d696ef89-e5d1-4707-b9be-6b8d1c7abf3d",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 116,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 519,
+      "prompt_tokens": 647,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 763
+    }
+  }
+}

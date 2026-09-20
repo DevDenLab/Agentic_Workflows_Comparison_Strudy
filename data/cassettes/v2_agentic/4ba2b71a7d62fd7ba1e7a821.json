@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: printing\nProposed urgency: low\nReasoning given: A copier reporting \"replace drum\" with streaky output is a print-quality/consumables issue on an office printer, matching the printing runbook guidance and a similar resolved printing ticket. It's a minor inconvenience with an easy workaround (use another copier), so urgency is low.\n\nCited excerpts:\n- Streaky, faded, or blank output on an office printer\nConsumables (toner, drum) first; this is very rarely a driver or network issue if only print\nquality (not connectivity) is affected.\n\n- Copier out of toner constantly: Toner sensor was miscalibrated after the last service visit; vendor recalibrated it, false low-toner warnings stopped. (resolved as printing / P4)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": true, \"reason\": \"The excerpts directly support the reasoning: the runbook excerpt covers streaky output and drum/toner consumables on office printers, and the similar ticket was resolved as printing/P4, matching the proposed printing/low classification.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_4L7rdlj6Kp9XuJXld1yZ4216",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436861,
+    "id": "adbbb2b7-10c8-4260-8a0a-fdbcf26d7763",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 94,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 409,
+      "prompt_tokens": 537,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 631
+    }
+  }
+}

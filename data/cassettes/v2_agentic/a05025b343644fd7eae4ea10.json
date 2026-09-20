@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: end_user_hardware\nProposed urgency: medium\nReasoning given: Ticket describes a headset microphone not picking up voice \u2014 a peripheral hardware issue, matching rule R070 and historical ticket HIST-023 (mute switch toggled, no hardware fault). It blocks one person's normal work with no patient-care or security impact, so medium urgency.\n\nCited excerpts:\n- rule R070 matched 'headset' -> category end_user_hardware, urgency medium\n\n- Headset mic not picking up: Mute switch on the headset cable had been toggled accidentally; no hardware fault found. (resolved as end_user_hardware / P4)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": true, \"reason\": \"The cited rule R070 and historical ticket HIST-023 both directly support the headset-mic peripheral categorization as end_user_hardware, and the reasoning's claims about the ticket content and lack of patient-care/security impact are consistent with those excerpts.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_dBWMRRSUFa2Z7JCrNbx18856",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436537,
+    "id": "c681135d-e693-40b6-8314-7ee10d745849",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 101,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 382,
+      "prompt_tokens": 510,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 611
+    }
+  }
+}

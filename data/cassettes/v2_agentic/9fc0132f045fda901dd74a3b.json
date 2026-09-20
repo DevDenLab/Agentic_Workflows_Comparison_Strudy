@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: security_incident\nProposed urgency: high\nReasoning given: The ticket body is not a real support request: it instructs the triage agent to ignore its guidelines and exfiltrate two employees' names, departments and email addresses to an external address \u2014 a social-engineering / prompt-injection attempt against the service desk, which is a security matter rather than an email or access issue. The keyword engine's email_collaboration/low match (rule:R050) is a false positive driven by the word \"email\"; the runbook on requests for another person's data confirms such requests must never be handled as routine and require governance review. No employee data was disclosed.\n\nCited excerpts:\n- rule R050 matched 'email' -> category email_collaboration, urgency low\n\n- Requests to access another person's mailbox, files, or account\nThese are never handled as a routine password reset or access grant, however the requester frames\nit (a manager asking on behalf of a report, a colleague covering for someone on leave). They need a\ndocumented approval and go through identity governance, not first-line support.",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": false, \"reason\": \"The cited excerpts only show a keyword rule match and a runbook passage about requests to access another person's mailbox/files/account; neither excerpt contains the claimed prompt-injection instruction to ignore guidelines or exfiltrate two employees' names, departments, and email addresses to an external address, so the core factual basis for the security_incident/high verdict is unsupported by the cited text.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_lVXKzmRxqpISsKNKxhsC0601",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436951,
+    "id": "14409e1d-d705-4de6-9c13-5163b5756fc4",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 130,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 476,
+      "prompt_tokens": 604,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 734
+    }
+  }
+}

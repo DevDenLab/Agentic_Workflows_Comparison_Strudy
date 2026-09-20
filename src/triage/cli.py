@@ -22,6 +22,7 @@ from triage.bench.scoring import score_case, summarise
 from triage.config import ConfigError, Settings
 from triage.container import (
     Container,
+    agent_benchmark_factory,
     build_container,
     build_v1,
     hybrid_benchmark_factory,
@@ -132,6 +133,7 @@ def review_sheet(
 class BenchPipeline(StrEnum):
     V1 = "v1"
     V1_5 = "v1.5"
+    V2 = "v2"
 
 
 BenchFactoryBuilder = Callable[[Settings, CassetteMode], Callable[[int], TriagePipeline]]
@@ -139,6 +141,9 @@ BenchFactoryBuilder = Callable[[Settings, CassetteMode], Callable[[int], TriageP
 _BENCH_FACTORIES: dict[BenchPipeline, BenchFactoryBuilder] = {
     BenchPipeline.V1: lambda settings, _llm_mode: v1_benchmark_factory(settings),
     BenchPipeline.V1_5: lambda settings, llm_mode: hybrid_benchmark_factory(
+        settings, llm_mode=llm_mode
+    ),
+    BenchPipeline.V2: lambda settings, llm_mode: agent_benchmark_factory(
         settings, llm_mode=llm_mode
     ),
 }

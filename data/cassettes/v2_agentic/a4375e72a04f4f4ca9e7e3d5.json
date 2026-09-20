@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: end_user_hardware\nProposed urgency: low\nReasoning given: The ticket contains no diagnostic content at all \u2014 no device, application, symptom, or requester identifier \u2014 so the keyword rule engine matched nothing and no CMDB record exists for the requester. The only weak signal is that the historical \"repeat complaint, no detail\" cases resolved as low-priority desktop-support hardware issues, so I classify it as end_user_hardware/low pending a request for specifics; this is a best-effort default, not a confident diagnosis.\n\nCited excerpts:\n- Copier out of toner constantly: Toner sensor was miscalibrated after the last service visit; vendor recalibrated it, false low-toner warnings stopped. (resolved as printing / P4)\n\n- App broke after the Windows update: Known incompatibility between the app version and the new OS build; rolled back to the previous known-good app version pending a vendor patch. (resolved as end_user_hardware / P4)\n\n- Headset mic not picking up: Mute switch on the headset cable had been toggled accidentally; no hardware fault found. (resolved as end_user_hardware / P4)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": false, \"reason\": \"The reasoning claims the ticket has no diagnostic content and that the keyword engine matched nothing, but the cited excerpts are only historical resolved cases and contain no information about the current ticket's content, so the central claims are unsupported by the citations.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_cm7Eo2njNfd44gOJ89zC3908",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789437079,
+    "id": "017e7b72-438d-4db4-afc9-520312f0c71c",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 98,
+      "prompt_cache_hit_tokens": 256,
+      "prompt_cache_miss_tokens": 364,
+      "prompt_tokens": 620,
+      "prompt_tokens_details": {
+        "cached_tokens": 256
+      },
+      "total_tokens": 718
+    }
+  }
+}

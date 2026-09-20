@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: clinical_applications\nProposed urgency: high\nReasoning given: The patient chart (EMR) client is dropping the session mid-documentation, causing lost clinical notes \u2014 an EMR application fault, not a network password issue, so it routes to Clinical Applications Support per the EMR runbook. Urgency is high because it is actively harming patient care by destroying documentation during the shift; the keyword rule engine matched nothing, so this was classified from the runbook and ticket content.\n\nCited excerpts:\n- Frozen or unresponsive while charting\n1. Confirm the issue is local, not organisation-wide: ask if colleagues on the same unit are affected.\n2. Ask the user to note the exact screen and patient context where it froze. Do not have them\n   restart the workstation until confirmed no unsaved note can be recovered.\n3. A single frozen session on one workstation: restart the EMR client, not the device.\n4. Repeated freezes tied to the medication administration record specifically: known interaction\n   with a slow print spooler on workstations-on-wheels; restart the print spooler service.\n5. If multipl\n\n- EMR sign-in fails but the network account works\nThis is usually an EMR-specific credential, not the network password. Do not reset the network\npassword for this. Escalate to Clinical Applications Support with the exact error text.\n\n- Ransom note on my screen: Device isolated from the network immediately per the ransomware runbook; confirmed contained to a single endpoint, reimaged from backup. (resolved as security_incident / P1)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": true, \"reason\": \"The excerpts support the reasoning: the EMR client freezing mid-charting with unsaved notes is an EMR application fault routed to Clinical Applications Support, and the ransomware excerpt is correctly excluded as a separate resolved case.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_RazhvET39NGh6nvpBD299523",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436700,
+    "id": "29d60ce6-9cd5-43c1-836c-cd41f090e1de",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 94,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 573,
+      "prompt_tokens": 701,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 795
+    }
+  }
+}

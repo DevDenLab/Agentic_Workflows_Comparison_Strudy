@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: access_identity\nProposed urgency: medium\nReasoning given: Ticket is a straightforward account lockout/password reset request (\"account locked\" after an update), which the keyword engine also maps to access_identity at medium urgency. Historical case HIST-004 shows this is handled by the service desk as a routine lockout (wait out the lockout window / use autofill), blocking only this one user's work with no patient-care or security impact. No evidence of compromise (no phishing, no unexpected MFA prompt), so no security escalation is warranted.\n\nCited excerpts:\n- rule R010 matched 'account locked' -> category access_identity, urgency medium\n\n- Locked out again: Advised the user to wait out the lockout window rather than retrying, and to use the password manager's autofill instead of typing manually. (resolved as access_identity / P4)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": true, \"reason\": \"The cited rule R010 match and HIST-004 excerpt directly support the account-lockout categorization, routine handling, single-user impact, and absence of security escalation claims.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_KWt9vU9OJS4gsQ6tlybg8554",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436445,
+    "id": "6817baae-0806-4bf4-9723-61889124111b",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 84,
+      "prompt_cache_hit_tokens": 256,
+      "prompt_cache_miss_tokens": 300,
+      "prompt_tokens": 556,
+      "prompt_tokens_details": {
+        "cached_tokens": 256
+      },
+      "total_tokens": 640
+    }
+  }
+}

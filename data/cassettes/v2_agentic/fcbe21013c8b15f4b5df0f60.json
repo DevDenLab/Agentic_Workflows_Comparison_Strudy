@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: email_collaboration\nProposed urgency: low\nReasoning given: Repeated Outlook credential prompts are a stale cached token issue, not a real password problem; the runbook and a near-identical resolved ticket (HIST-010) both show clearing cached credentials fixes it without a reset. It blocks only this one user's mail client with an easy workaround, so urgency is low.\n\nCited excerpts:\n- rule R050 matched 'outlook' -> category email_collaboration, urgency low\n\n- Repeated credential prompts in the desktop mail client\nUsually a stale cached token rather than an actually-wrong password. Clearing the cached\ncredentials for the account resolves most cases without an actual password reset.\n\n- Outlook keeps asking for my password: Cleared the cached credentials for the account in Windows Credential Manager; prompts stopped without a password reset. (resolved as email_collaboration / P4)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": true, \"reason\": \"The excerpts directly support each claim: R050 maps 'outlook' to email_collaboration/low, the runbook states repeated prompts are usually a stale cached token fixed by clearing cached credentials without a reset, and HIST-010 confirms this resolution at P4.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_7g67btkKuzoJWbKTDdsF2150",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436573,
+    "id": "37dac83c-5686-4839-9b79-59fd6f951371",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 104,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 430,
+      "prompt_tokens": 558,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 662
+    }
+  }
+}

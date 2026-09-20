@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: email_collaboration\nProposed urgency: low\nReasoning given: The request is to preserve a mailbox's contents (a litigation hold on Kevin Nguyen's email), which is an email/retention administration task rather than a fault \u2014 the keyword engine also lands on email_collaboration. It is a routine request with no patient-care or security impact, so urgency is low; note the named employee is not in the CMDB, so the hold should be verified against the correct identity before actioning.\n\nCited excerpts:\n- rule R050 matched 'email' -> category email_collaboration, urgency low\n\n- Shared mailbox or calendar access requests\nA request to be added to a team or shared mailbox is routine self-service once a manager or an\nexisting delegate approves it. A request for someone's individual mailbox is not the same category;\nsee the access-and-identity runbook.\n\n- New starter needs an account: Provisioned the account and mailbox ahead of the start date once the request form was completed. (resolved as access_identity / P4)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": false, \"reason\": \"The cited excerpts only show a keyword rule matching 'email' and text about shared-mailbox access requests and new-starter provisioning; none of them mention litigation holds, mailbox retention/preservation, or Kevin Nguyen, so the reasoning's central claims are unsupported by the excerpts.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_amRNi3dCOVphyGQI0VrD9591",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789437149,
+    "id": "43f1aa82-0b49-40b5-bcb0-cf2c29f95c9b",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 106,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 463,
+      "prompt_tokens": 591,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 697
+    }
+  }
+}

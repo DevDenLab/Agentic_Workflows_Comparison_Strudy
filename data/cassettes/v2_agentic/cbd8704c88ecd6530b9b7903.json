@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: email_collaboration\nProposed urgency: low\nReasoning given: Teams reporting \"not connected\" while general web browsing works is a Teams client/connectivity issue, matching the rule engine's email_collaboration classification and a resolved historical case where the client's connectivity complaint was resolved by network/AP conditions. It blocks only this one user's collaboration with an easy workaround, so urgency is low.\n\nCited excerpts:\n- rule R050 matched 'teams' -> category email_collaboration, urgency low\n\n- Video calls freeze after a minute: User was roaming between two access points near a stairwell; moving to a desk with stronger single-AP coverage resolved it. (resolved as email_collaboration / P4)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": true, \"reason\": \"The cited rule R050 explicitly maps 'teams' to email_collaboration/low, and the historical case excerpt supports the network/AP connectivity resolution claim, so the reasoning's claims are backed by the excerpts.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_bocN6eqPnqXKRd2Rhiqe8242",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789437101,
+    "id": "7a4ece38-fe1d-45be-bafa-c111bddf553b",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 94,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 399,
+      "prompt_tokens": 527,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 621
+    }
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: network_connectivity\nProposed urgency: high\nReasoning given: Ticket reports the wireless network down for all staff in the emergency department \u2014 a department-wide connectivity outage, matching the network_connectivity rule (R041) and the network runbook/prior network_operations case. Unlike the rule engine's default medium, this affects an entire ED, so it plausibly harms patient care and is escalated to high urgency.\n\nCited excerpts:\n- rule R041 matched 'wireless' -> category network_connectivity, urgency medium\n\n- Wi-Fi unreliable in a specific physical area\nChronic Wi-Fi trouble confined to one room or hallway is almost always an access-point coverage gap,\nnot a client device fault. Note the exact location for the network team; do not spend time\nre-imaging or swapping devices for a coverage problem.\n\n- Network cable dead in meeting room: Wall port was disabled at the switch from a previous move; re-enabled the port, connection restored. (resolved as network_connectivity / P4)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": false, \"reason\": \"The cited excerpts only show a keyword rule match and unrelated coverage-gap/cable cases; none of them state that the wireless network is down for all staff in the emergency department, so the department-wide ED outage claim is unsupported.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_OLa71nPRGXmAZlBZq6M09492",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436564,
+    "id": "61609082-b7f1-46b6-b9eb-9f100067f0b2",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 97,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 453,
+      "prompt_tokens": 581,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 678
+    }
+  }
+}

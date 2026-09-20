@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: clinical_devices\nProposed urgency: high\nReasoning given: The ticket names a medication cart computer (a workstation on wheels) that won't power on, which the rule engine and the WOW/med-cart runbook both map to clinical_devices; a dead cart in a med bay blocks medication administration on the unit, so urgency is high. The asset tag isn't in the CMDB, so no requester/asset context was available.\n\nCited excerpts:\n- rule R031 matched 'medication cart' -> category clinical_devices, urgency high\n\n- Workstation on wheels (WOW) / medication cart problems\n- Won't power on: check the cart is docked and the dock's indicator light is green, not amber.\n- Battery dies within an hour: batteries are rated for an 8-hour shift; anything under 3 hours is a\n  battery replacement, not a software issue.\n- Shuts off mid-use: this is almost always thermal shutdown from a blocked vent on the cart, not the\n  computer itself. Confirm nothing is stacked on top of the cart.\n\n- Scanner won't read new armbands: New wristband stock had a slightly different print contrast; ribbon replacement on the wristband printer fixed legibility and scanning both. (resolved as clinical_devices / P2)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": true, \"reason\": \"The excerpts directly support the reasoning: rule R031 maps \\\"medication cart\\\" to clinical_devices/high, and the WOW/med-cart runbook covers \\\"Won't power on\\\" for medication carts, so the cited evidence backs the category and urgency claims.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_gUaBTQTmi9ZzWF4JjJeg3913",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436504,
+    "id": "6b4a0a54-daf7-4071-b487-3c76644dc12b",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 106,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 515,
+      "prompt_tokens": 643,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 749
+    }
+  }
+}

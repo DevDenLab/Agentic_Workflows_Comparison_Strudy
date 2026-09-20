@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: security_incident\nProposed urgency: medium\nReasoning given: The user reports a credential-harvesting email threatening mailbox deletion unless they log in \u2014 a classic phishing lure, matching historical phishing tickets that were categorised as security_incident and routed to security_operations. The user did not click through and no compromise is confirmed, so urgency is medium rather than high; the message should be reported/quarantined and the user reminded not to interact with it.\n\nCited excerpts:\n- Phishing email about a parcel delivery: Confirmed phishing, sender domain not affiliated with any courier. Message quarantined org-wide, user did not click through. (resolved as security_incident / P3)\n\n- Suspicious call asking for my login code: Treated as likely compromise; forced a credential reset and re-enrolled MFA, reviewed sign-in logs for unauthorized access. (resolved as security_incident / P2)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": true, \"reason\": \"The cited excerpts support the reasoning: one shows a confirmed phishing email quarantined with no click-through resolved as security_incident, and the other shows a credential-related incident resolved as security_incident, consistent with classifying this phishing lure as security_incident at medium urgency given no confirmed compromise.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_m2X8sOEzwMB0jmiZz8mH5734",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436900,
+    "id": "a44b0751-3627-4530-818c-687f15deda36",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 111,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 439,
+      "prompt_tokens": 567,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 678
+    }
+  }
+}

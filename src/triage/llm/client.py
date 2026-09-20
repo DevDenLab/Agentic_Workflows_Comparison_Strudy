@@ -1,5 +1,5 @@
-"""A minimal OpenAI-compatible /chat/completions client: exactly what the hybrid and agent
-pipelines need (forced native tool calls), nothing else.
+"""A minimal OpenAI-compatible /chat/completions client: forced single tool calls (v1.5's
+classifier) and full multi-turn tool-calling conversations (v2's agent loop).
 
 Swapping providers is a base URL and model change — DeepSeek, OpenRouter, Ollama and vLLM all speak
 this shape. `Transport` is the seam tests and record/replay (cassette.py) plug into.
@@ -16,19 +16,41 @@ from pydantic import BaseModel, ConfigDict
 from triage.clock import Clock
 
 
-class LlmMessage(BaseModel):
-    model_config = ConfigDict(frozen=True, extra="forbid")
-
-    role: Literal["system", "user", "assistant"]
-    content: str
-
-
 class ToolCall(BaseModel):
+    """A tool invocation: parsed out of a model response, or echoed back into the next request
+    as part of the assistant turn that made it (multi-turn tool calling)."""
+
     model_config = ConfigDict(frozen=True, extra="forbid")
 
     id: str
     name: str
     arguments: dict[str, Any]
+
+
+class LlmMessage(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    role: Literal["system", "user", "assistant", "tool"]
+    content: str | None = None
+    tool_calls: tuple[ToolCall, ...] = ()
+    """Assistant turns only: the tool calls that turn made."""
+    tool_call_id: str | None = None
+    """Tool turns only: which assistant tool_call this result answers."""
+
+    def to_wire(self) -> dict[str, Any]:
+        wire: dict[str, Any] = {"role": self.role, "content": self.content}
+        if self.tool_calls:
+            wire["tool_calls"] = [
+                {
+                    "id": call.id,
+                    "type": "function",
+                    "function": {"name": call.name, "arguments": json.dumps(call.arguments)},
+                }
+                for call in self.tool_calls
+            ]
+        if self.tool_call_id is not None:
+            wire["tool_call_id"] = self.tool_call_id
+        return wire
 
 
 @dataclass(frozen=True, slots=True)
@@ -92,22 +114,26 @@ class LlmClient:
         *,
         messages: Sequence[LlmMessage],
         tools: Sequence[dict[str, Any]] = (),
-        tool_choice: str | None = None,
+        tool_choice: str | Literal["auto"] | None = None,
         temperature: float,
         max_tokens: int,
         timeout_seconds: float,
         seed: int | None = None,
         extra: dict[str, Any] | None = None,
     ) -> ChatResult:
+        """`tool_choice`: a tool name forces that call; "auto" lets the model choose or stop;
+        None omits tools/tool_choice from the request entirely."""
         payload: dict[str, Any] = {
             "model": self._model,
-            "messages": [m.model_dump() for m in messages],
+            "messages": [m.to_wire() for m in messages],
             "temperature": temperature,
             "max_tokens": max_tokens,
         }
         if tools:
             payload["tools"] = list(tools)
-        if tool_choice is not None:
+        if tool_choice == "auto":
+            payload["tool_choice"] = "auto"
+        elif tool_choice is not None:
             payload["tool_choice"] = {"type": "function", "function": {"name": tool_choice}}
         if seed is not None:
             payload["seed"] = seed

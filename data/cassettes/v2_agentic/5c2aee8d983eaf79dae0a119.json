@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: printing\nProposed urgency: low\nReasoning given: Scan-to-email failure on a floor copier is a printing-category issue; the runbook and a resolved historical ticket both point to expired stored SMTP credentials on the device, a minor inconvenience with an easy fix and no patient-care or security impact, so urgency is low.\n\nCited excerpts:\n- rule R030 matched 'scan to email' -> category printing, urgency low\n\n- Scan-to-email not sending\nThis is usually the printer's stored SMTP credentials expiring, not a problem with the destination\nmailbox. Confirm the destination address is correct before escalating as an email-delivery issue.\n\n- Scan to email not arriving: The printer's stored SMTP credentials had expired after a password rotation; re-entered current credentials on the device. (resolved as printing / P4)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": true, \"reason\": \"The excerpts directly support each claim: rule R030 maps scan-to-email to printing/low, the runbook attributes the failure to expired stored SMTP credentials, and the resolved ticket confirms that cause with a printing/P4 resolution.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_ddY8fn28yVNdRBRPc0oL7240",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436611,
+    "id": "d7235ca5-744c-4110-8a6b-4aa39daf3444",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 96,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 419,
+      "prompt_tokens": 547,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 643
+    }
+  }
+}

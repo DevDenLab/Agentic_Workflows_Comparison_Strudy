@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: clinical_devices\nProposed urgency: medium\nReasoning given: Scanners failing to read armband barcodes is a care-unit barcode/wristband device issue, matching the clinical_devices runbook and historical cases where wristband print contrast/ribbon problems broke scanning. It blocks normal unit workflow but shows no active harm or spread, so medium urgency; the rule engine matched nothing, so classification rests on the runbook and history.\n\nCited excerpts:\n- Barcode scanners not reading wristbands\n1. Confirm the wristband label itself is legible and not printed faint (see the wristband printer\n   section below); a scanner fault and a bad label look identical to the end user.\n2. Re-pair the scanner to its base station: hold the trigger for 5 seconds until it beeps twice.\n3. If several scanners on the same unit fail at once, the base station or its network drop is the\n   more likely cause than the individual scanners; escalate as a unit-wide issue.\n\n- Wristband / label printers\nBlank or faded output on an otherwise-working printer is a ribbon or label-stock issue, not a\nsoftware fault. Confirm ribbon orientation before escalating a repair ticket.\n\n- Scanner won't read new armbands: New wristband stock had a slightly different print contrast; ribbon replacement on the wristband printer fixed legibility and scanning both. (resolved as clinical_devices / P2)\n\n- Wristband printer prints blank: Ribbon was loaded backwards after a cartridge change; correcting ribbon orientation fixed it immediately. (resolved as clinical_devices / P2)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": true, \"reason\": \"The cited runbook and historical cases directly support the claims: scanners not reading wristbands is a clinical_devices barcode/wristband issue, ribbon/print-contrast problems broke scanning, and the issue blocks unit workflow without indicating active harm or spread, consistent with medium urgency.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_Iikh8kOtmj1t3yAbqoJl6850",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436744,
+    "id": "5f7662da-ced3-4a33-8b0f-07b050e21630",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 107,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 574,
+      "prompt_tokens": 702,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 809
+    }
+  }
+}

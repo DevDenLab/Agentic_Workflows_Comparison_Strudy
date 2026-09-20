@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: printing\nProposed urgency: low\nReasoning given: The ticket is a single-user print failure (error 0x00000709) from a laptop, matching the printing keyword rule and a resolved historical case where a hung print spooler was cleared by restarting the service. No patient-care, security, or spreading impact, so urgency is low.\n\nCited excerpts:\n- rule R060 matched 'printing' -> category printing, urgency low\n\n- Print queue frozen: Print spooler service was hung; restarting the spooler cleared the stuck queue and printing resumed. (resolved as printing / P4)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": true, \"reason\": \"The cited excerpts directly support the claims: rule R060 matches 'printing' with low urgency, and the historical case describes a hung print spooler resolved as printing/P4, consistent with a single-user print failure and low urgency.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_2CmxwSKBG4FkU2qeZLdN2135",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436615,
+    "id": "ec472b4c-bf06-4bc6-8db0-a0359f219d0a",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 97,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 372,
+      "prompt_tokens": 500,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 597
+    }
+  }
+}

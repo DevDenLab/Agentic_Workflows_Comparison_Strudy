@@ -1,0 +1,91 @@
+{
+  "request": {
+    "max_tokens": 150,
+    "messages": [
+      {
+        "content": "You are a grounding critic for an IT service-desk triage decision. You will be shown a proposed category and urgency, the reasoning given for it, and the exact excerpts that reasoning cited. Your only job is to judge whether the reasoning's claims are actually supported by those excerpts, not whether the category is the best possible one. Call critic_verdict once.",
+        "role": "system"
+      },
+      {
+        "content": "Proposed category: software_request\nProposed urgency: low\nReasoning given: A straightforward request to install licensed software (Adobe Acrobat Pro) with manager approval already stated; the rule engine and the software-licensing runbook both treat this as a routine low-urgency software request, matching historical ticket HIST-012 where a manager-approved licence was assigned and installed. No patient-care, security, or blocking impact.\n\nCited excerpts:\n- rule R080 matched 'licence' -> category software_request, urgency low\n\n- New install or upgrade requests\nConfirm whether the software needs a paid licence before treating this as a quick install. Licensed\nsoftware requests need manager approval on file; unlicensed or free tools generally do not.\n\n- Need Visio for org chart work: Manager approval logged, Visio licence assigned and installed same day. (resolved as software_request / P4)",
+        "role": "user"
+      }
+    ],
+    "model": "deepseek-flash",
+    "temperature": 0.0,
+    "thinking": {
+      "type": "disabled"
+    },
+    "tool_choice": {
+      "function": {
+        "name": "critic_verdict"
+      },
+      "type": "function"
+    },
+    "tools": [
+      {
+        "function": {
+          "description": "Give your grounding verdict.",
+          "name": "critic_verdict",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {
+              "grounded": {
+                "type": "boolean"
+              },
+              "reason": {
+                "description": "One sentence.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "grounded",
+              "reason"
+            ],
+            "type": "object"
+          }
+        },
+        "type": "function"
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"grounded\": true, \"reason\": \"The cited excerpts support the reasoning: rule R080 maps 'licence' to software_request/low, the runbook excerpt confirms licensed software requests need manager approval on file, and HIST-012 shows a manager-approved licence resolved as software_request/P4, matching the stated rationale.\"}",
+                "name": "critic_verdict"
+              },
+              "id": "call_00_SUC64SnnEZLhbL1rLBa45209",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1789436632,
+    "id": "93e417d3-72ea-441f-9cdf-9c0987486aca",
+    "model": "deepseek-flash",
+    "object": "chat.completion",
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669",
+    "usage": {
+      "completion_tokens": 105,
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 421,
+      "prompt_tokens": 549,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "total_tokens": 654
+    }
+  }
+}
